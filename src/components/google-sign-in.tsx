@@ -1,5 +1,7 @@
 import { auth, signIn } from "@/lib/auth";
 import { SignOut } from "./sign-out";
+import { Button } from "./ui/button";
+import { Google } from "./ui/google";
 
 export const GoogleSignIn = async () => {
   const session = await auth();
@@ -18,7 +20,10 @@ export const GoogleSignIn = async () => {
         await signIn("google");
       }}
     >
-      <button type="submit">Signin with Google</button>
+      <Button className="w-full cursor-pointer" variant="outline">
+        <Google />
+        Continue with GitHub
+      </Button>
     </form>
   );
 };

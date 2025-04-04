@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import { schema } from "@/app/lib/schema";
-import db from "@/app/lib/prisma";
+import { schema } from "@/lib/schema";
+import db from "@/lib/prisma";
 import { encode as defaultEncode } from "next-auth/jwt";
 import { v4 as uuid } from "uuid";
 import { PrismaAdapter } from "@auth/prisma-adapter";

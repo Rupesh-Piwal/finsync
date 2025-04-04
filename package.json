@@ -8,10 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node prisma/seed.ts",
-    "db:migrate": "npx prisma migrate dev"
-  },
-  "prisma": {
-    "schema": "@/prisma/schema.prisma"
+    "db:migrate": "npx prisma migrate dev",
+    "db:studio":"npx prisma studio"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.8.0",

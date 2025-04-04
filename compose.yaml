@@ -23,7 +23,7 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=supersecret123
       - POSTGRES_DB=mydb
     volumes:
       - postgres_data:/var/lib/postgresql/data

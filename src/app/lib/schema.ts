@@ -1,11 +1,17 @@
 import { z } from "zod";
 
+export const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
+type Schema = z.infer<typeof schema>;
+
 export const amountValidation = z.number().positive("Amount must be positive");
 export const dateValidation = z
   .date()
   .max(new Date(), "Date cannot be in the future");
 export const uuidValidation = z.string().uuid("Invalid ID format");
-
 
 export const budgetFormSchema = z.object({
   name: z
@@ -17,7 +23,6 @@ export const budgetFormSchema = z.object({
 });
 
 export type BudgetFormValues = z.infer<typeof budgetFormSchema>;
-
 
 export const expenseFormSchema = z.object({
   title: z
@@ -31,7 +36,6 @@ export const expenseFormSchema = z.object({
 });
 
 export type ExpenseFormValues = z.infer<typeof expenseFormSchema>;
-
 
 export const categoryFormSchema = z.object({
   name: z

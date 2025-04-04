@@ -37,6 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  trustHost:true,
   callbacks: {
     async jwt({ token, account }) {
       if (account?.provider === "credentials") {

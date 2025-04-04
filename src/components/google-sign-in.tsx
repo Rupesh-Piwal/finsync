@@ -22,7 +22,7 @@ export const GoogleSignIn = async () => {
     >
       <Button className="w-full cursor-pointer" variant="outline">
         <Google />
-        Continue with GitHub
+        Continue with Google
       </Button>
     </form>
   );

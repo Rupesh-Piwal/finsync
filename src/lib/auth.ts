@@ -22,6 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         const validatedCredentials = schema.parse(credentials);
+
         const user = await db.user.findFirst({
           where: {
             email: validatedCredentials.email,
@@ -37,7 +38,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  trustHost:true,
   callbacks: {
     async jwt({ token, account }) {
       if (account?.provider === "credentials") {

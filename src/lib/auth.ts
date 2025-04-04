@@ -13,6 +13,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: {},
         password: {},
       },
+authorize:async (credentials){
+  const validatedCredentials = schema.parse(credentials)
+}
+
+
     }),
   ],
   secret: process.env.AUTH_SECRET,

@@ -35,6 +35,7 @@ COPY . .
 ENV NEXTAUTH_URL=http://localhost:3000
 ENV AUTH_TRUST_HOST=true
 ENV NODE_ENV=development  
+ENV ARCJET_KEY=ajkey_01jr6a8ckpfh8b9aqkf1fqb0gw
 
 # Expose port 3000 for Next.js
 EXPOSE 3000

@@ -77,9 +77,9 @@ export const FeatureCards = () => {
     <div className=" w-full py-24 px-4 relative">
       {/* Modern background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-emerald-900/20 blur-3xl animate-pulse"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-teal-900/20 blur-3xl animate-pulse"
+          className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full  blur-3xl animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-grid-pattern opacity-5"></div>

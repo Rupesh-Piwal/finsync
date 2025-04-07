@@ -4,18 +4,10 @@ import { Button } from "@/components/ui/button";
 export const HeroSection = () => {
   return (
     <div className="flex-1 w-full flex flex-col md:flex-row items-center justify-between px-4 py-16 md:py-28 md:px-10 max-w-7xl mx-auto relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-700/20 via-gray-950 to-teal-800/10 z-0"></div>
-      <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-gradient-to-br from-emerald-500/10 to-teal-400/5 blur-3xl animate-pulse"></div>
-      <div
-        className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-gradient-to-tr from-teal-500/10 to-emerald-400/5 blur-3xl animate-pulse"
-        style={{ animationDelay: "1.5s" }}
-      ></div>
 
-      {/* Left content */}
       <HeroContent />
 
-      {/* Right content */}
+   
       <ReceiptVisualization />
     </div>
   );

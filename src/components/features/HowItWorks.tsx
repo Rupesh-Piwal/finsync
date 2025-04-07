@@ -37,15 +37,8 @@ export const HowItWorks = () => {
       ),
       illustration: (
         <div className="relative h-full w-full">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-32 h-48 bg-white/10 backdrop-blur-sm rounded-lg shadow-xl border border-white/20 flex flex-col items-center justify-center">
-              <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 mb-4"></div>
-              <div className="w-20 h-2 bg-white/30 rounded-full mb-2"></div>
-              <div className="w-16 h-2 bg-white/20 rounded-full"></div>
-            </div>
-          </div>
           <motion.div
-            className="absolute left-1/2 -translate-x-1/2 -top-4 w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-lg shadow-lg flex items-center justify-center transform rotate-12"
+            className="absolute left-1/2 -translate-x-1/2 -top-4 w-16 h-16  rounded-lg shadow-lg flex items-center justify-center transform rotate-12"
             animate={{
               y: [0, -20, 0],
               rotate: [12, -5, 12],

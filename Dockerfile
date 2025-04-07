@@ -31,9 +31,6 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Set environment variables for NextAuth.js (specific to development)
-ENV NEXTAUTH_URL=http://localhost:3000
-ENV AUTH_TRUST_HOST=true
 ENV NODE_ENV=development  
 ENV ARCJET_KEY=ajkey_01jr6a8ckpfh8b9aqkf1fqb0gw
 

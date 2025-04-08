@@ -4,19 +4,14 @@ import { LayoutDashboard, BadgePlus } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
+import { Logo } from "./ui/logo";
 
 const Header = async () => {
   return (
     <header className="fixed top-0 w-full z-50  backdrop-blur-md">
       <nav className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="transition-transform hover:scale-105">
-          <Image
-            src={"/logo.png"}
-            alt="Welth Logo"
-            width={200}
-            height={60}
-            className="h-12 w-auto object-contain drop-shadow-md"
-          />
+        <Link href="/">
+          <Logo />
         </Link>
 
         <div className="hidden md:flex items-center space-x-8">

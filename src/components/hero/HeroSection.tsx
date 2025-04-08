@@ -1,26 +1,49 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  Sparkles,
+  ArrowRight,
+  Play,
+  Clock,
+  CheckCircle,
+  Receipt,
+  ChevronRight,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 export const HeroSection = () => {
   return (
-    <div className="flex-1 w-full flex flex-col md:flex-row items-center justify-between px-4 py-16 md:py-28 md:px-10 max-w-7xl mx-auto relative overflow-hidden">
-
+    <div className="w-full flex flex-col md:flex-row items-center justify-between px-6 py-20 md:py-32 md:px-10 max-w-7xl mx-auto relative overflow-hidden">
       <HeroContent />
-
-   
       <ReceiptVisualization />
+
+      {/* Background decorative elements */}
+      <div className="absolute -top-40 -left-40 w-80 h-80 rounded-full bg-emerald-700/10 blur-3xl"></div>
+      <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-teal-700/10 blur-3xl"></div>
     </div>
   );
 };
 
 const HeroContent = () => {
   return (
-    <div className="w-full md:w-1/2 space-y-10 text-center md:text-left z-10">
-      <div className="space-y-2">
-        <div className="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-900/70 to-teal-900/70 text-emerald-300 text-sm font-medium mb-4 backdrop-blur-sm shadow-inner shadow-emerald-900/20">
-          AI-Powered Receipt Scanning
-        </div>
-        <h1 className="text-4xl md:text-6xl font-bold">
+    <div className="md:w-1/2 space-y-12 text-center md:text-left z-10">
+      <div className="space-y-6">
+        <Badge
+          variant="outline"
+          className="px-4 py-1.5 rounded-full border-emerald-800/40 bg-emerald-950/30 text-emerald-300 flex items-center gap-2 w-fit mx-auto md:mx-0"
+        >
+          <Sparkles size={16} className="text-emerald-300" />
+          <span className="font-medium">AI-Powered Receipt Scanning</span>
+        </Badge>
+
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-emerald-300 bg-clip-text text-transparent">
             Transform Receipts
           </span>
@@ -29,25 +52,36 @@ const HeroContent = () => {
             Into Insights
           </span>
         </h1>
+
+        <p className="text-lg text-gray-300 leading-relaxed max-w-lg mx-auto md:mx-0">
+          Our AI instantly scans and converts your receipts and bills into
+          organized expenses. No more manual data entry — just snap, scan, and
+          track.
+        </p>
       </div>
-      <p className="text-xl text-gray-300 leading-relaxed">
-        Our AI instantly scans and converts your receipts and bills into
-        organized expenses. No more manual data entry — just snap, scan, and
-        track.
-      </p>
+
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 md:justify-start justify-center">
         <Button
           asChild
-          className="bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 hover:from-emerald-500 hover:via-teal-400 hover:to-emerald-400 text-white rounded-full h-14 px-10 font-medium transition-all duration-300 shadow-lg shadow-emerald-900/30"
+          size="lg"
+          className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-full px-8 font-medium shadow-lg shadow-emerald-900/30 sm:w-[70%]"
         >
-          <Link href="/sign-in">Try For Free</Link>
+          <Link href="/sign-in" className="flex items-center gap-2">
+            Try For Free
+            <ArrowRight size={16} />
+          </Link>
         </Button>
+
         <Button
           variant="outline"
-          className="border-2 border-gradient from-emerald-500/40 to-teal-500/40 bg-gray-950/50 backdrop-blur-sm text-emerald-300 hover:text-emerald-200 hover:bg-gray-900 rounded-full h-14 px-10 font-medium transition-all duration-300"
+          size="lg"
           asChild
+          className="border-2 border-emerald-500/20 bg-gray-950/50 backdrop-blur-sm text-emerald-300 hover:text-emerald-200 hover:bg-gray-900/70 rounded-full px-8 font-medium"
         >
-          <Link href="/sign-up">Watch Demo</Link>
+          <Link href="/sign-up" className="flex items-center gap-2">
+            <Play size={16} className="fill-emerald-300" />
+            Watch Demo
+          </Link>
         </Button>
       </div>
     </div>
@@ -55,69 +89,320 @@ const HeroContent = () => {
 };
 
 const ReceiptVisualization = () => {
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState("scanning");
+
+  // Simulate receipt scanning process
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setProgress(30);
+      setTimeout(() => {
+        setProgress(65);
+        setTimeout(() => {
+          setProgress(100);
+          setStatus("complete");
+        }, 2000);
+      }, 1500);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="hidden md:block w-1/2 z-10 pl-10">
-      <div className="relative h-96 w-full max-w-md mx-auto">
-        {/* Phone frame */}
-        <div className="absolute inset-0 rounded-3xl border-8 border-gray-800 bg-gray-900 shadow-xl transform rotate-3 overflow-hidden">
-          {/* Screen content */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 p-4">
-            {/* Receipt being scanned visualization */}
-            <div className="h-full flex flex-col">
-              <div className="text-sm text-emerald-400 font-medium mb-2">
-                FinSync AI
-              </div>
+      {/* Phone frame with 3D effect */}
+      <div className="relative h-[500px] w-full max-w-md mx-auto perspective-1000">
+        <motion.div
+          initial={{ rotateY: 5, rotateX: 5 }}
+          animate={{ rotateY: 0, rotateX: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          whileHover={{ rotateY: -5, rotateX: -5 }}
+          className="absolute inset-0"
+        >
+          <Card className="relative h-full w-full bg-gradient-to-br from-gray-900 to-gray-950 border-gray-800 shadow-2xl overflow-hidden rounded-3xl transform-gpu">
+            {/* Phone notch */}
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-36 h-6 bg-gray-950 rounded-b-xl z-50"></div>
 
-              {/* "Scanner" view with receipt */}
-              <div className="flex-1 relative rounded-lg bg-gray-950 flex items-center justify-center overflow-hidden border border-gray-800">
-                {/* Receipt */}
-                <div className="w-3/4 h-4/5 bg-white rounded-md shadow-lg transform rotate-2">
-                  {/* Receipt contents */}
-                  <div className="h-full w-full p-2 flex flex-col">
-                    <div className="border-b border-gray-300 pb-1 text-center">
-                      <div className="text-gray-900 text-xs font-medium">
-                        COFFEE SHOP
+            <CardContent className="p-0 h-full relative">
+              {/* App UI */}
+              <div className="absolute inset-0 p-4">
+                <div className="h-full flex flex-col">
+                  {/* App header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-600">
+                        <AvatarFallback className="text-white text-xs">
+                          FS
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <h3 className="font-semibold text-emerald-300">
+                          FinSync AI
+                        </h3>
+                        <p className="text-xs text-gray-400">Receipt Scanner</p>
                       </div>
                     </div>
-                    <div className="flex-1 py-1">
-                      <div className="flex justify-between">
-                        <div className="bg-gray-200 h-1 w-20 rounded-full"></div>
-                        <div className="bg-gray-200 h-1 w-8 rounded-full"></div>
-                      </div>
-                      <div className="mt-2 bg-gray-200 h-1 w-full rounded-full"></div>
-                      <div className="mt-2 bg-gray-200 h-1 w-full rounded-full"></div>
-                      <div className="mt-2 bg-gray-200 h-1 w-3/4 rounded-full"></div>
-                    </div>
-                    <div className="border-t border-gray-300 pt-1 flex justify-between">
-                      <div className="bg-gray-300 h-2 w-12 rounded-full"></div>
-                      <div className="bg-gray-800 h-2 w-10 rounded-full"></div>
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant="outline"
+                        className="bg-emerald-950/30 border-emerald-900/30 text-emerald-300 text-xs"
+                      >
+                        PRO
+                      </Badge>
                     </div>
                   </div>
-                </div>
 
-                {/* Scanning effect */}
-                <div className="absolute inset-x-0 h-8 bg-gradient-to-b from-emerald-400/30 to-transparent rounded-full blur-sm animate-scan"></div>
+                  {/* Tab navigation */}
+                  <Tabs defaultValue="scan" className="mb-2">
+                    <TabsList className="grid grid-cols-3 bg-gray-900/50 backdrop-blur-sm">
+                      <TabsTrigger
+                        value="scan"
+                        className="data-[state=active]:bg-emerald-950/50 data-[state=active]:text-emerald-300"
+                      >
+                        Scan
+                      </TabsTrigger>
+                      
+                    </TabsList>
+
+                    <TabsContent value="scan" className="mt-2">
+                      {/* Scanner view */}
+                      <Card className="relative h-64 bg-gray-950 border-gray-800 overflow-hidden">
+                        <CardContent className="p-0 h-full flex items-center justify-center">
+                          {/* Scanner focus frame */}
+                          <div className="relative z-10 w-3/4 h-3/4 border-2 border-emerald-400/30 rounded-md flex items-center justify-center">
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.5 }}
+                              className="absolute inset-0 flex items-center justify-center"
+                            >
+                              {/* Corner indicators */}
+                              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-400"></div>
+                              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-emerald-400"></div>
+                              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-emerald-400"></div>
+                              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-400"></div>
+                            </motion.div>
+
+                            {/* Receipt */}
+                            <motion.div
+                              initial={{ y: 50, opacity: 0 }}
+                              animate={{ y: 0, opacity: 1 }}
+                              transition={{ delay: 0.8, type: "spring" }}
+                              className="w-[85%] h-[85%] bg-white rounded-md shadow-lg transform rotate-2 relative z-20"
+                            >
+                              {/* Receipt contents */}
+                              <div className="h-full w-full p-2 flex flex-col">
+                                <div className="border-b border-gray-300 pb-1">
+                                  <div className="text-gray-900 text-xs font-medium text-center">
+                                    COFFEE SHOP
+                                  </div>
+                                  <div className="text-gray-500 text-[8px] text-center">
+                                    123 Main Street
+                                  </div>
+                                </div>
+                                <div className="flex-1 py-1 space-y-2">
+                                  <div className="flex justify-between items-center">
+                                    <div className="bg-gray-200 h-1.5 w-20 rounded-full"></div>
+                                    <div className="bg-gray-200 h-1.5 w-10 rounded-full"></div>
+                                  </div>
+                                  <div className="flex justify-between items-center">
+                                    <div className="bg-gray-300 h-1.5 w-24 rounded-full"></div>
+                                    <div className="bg-gray-300 h-1.5 w-8 rounded-full"></div>
+                                  </div>
+                                  <div className="flex justify-between items-center">
+                                    <div className="bg-gray-200 h-1.5 w-16 rounded-full"></div>
+                                    <div className="bg-gray-200 h-1.5 w-12 rounded-full"></div>
+                                  </div>
+                                  <div className="mt-2 border-t border-gray-200 pt-1"></div>
+                                  <div className="flex justify-between items-center">
+                                    <div className="bg-gray-300 h-1.5 w-10 rounded-full"></div>
+                                    <div className="bg-gray-300 h-1.5 w-12 rounded-full"></div>
+                                  </div>
+                                  <div className="flex justify-between items-center">
+                                    <div className="bg-gray-800 h-1.5 w-16 rounded-full"></div>
+                                    <div className="bg-gray-800 h-1.5 w-12 rounded-full"></div>
+                                  </div>
+                                </div>
+                                <div className="border-t border-gray-300 pt-1 flex justify-between items-center">
+                                  <div className="flex flex-col gap-0.5">
+                                    <div className="bg-gray-300 h-1 w-12 rounded-full"></div>
+                                    <div className="bg-gray-200 h-1 w-16 rounded-full"></div>
+                                  </div>
+                                  <div className="bg-gray-800 h-1.5 w-14 rounded-full"></div>
+                                </div>
+                              </div>
+                            </motion.div>
+                          </div>
+
+                          {/* Scanning effects */}
+                          <motion.div
+                            initial={{ top: "-10%" }}
+                            animate={{
+                              top: ["0%", "100%", "0%"],
+                              opacity: [0.8, 0.6, 0.8],
+                            }}
+                            transition={{
+                              repeat: Infinity,
+                              duration: 3,
+                              ease: "easeInOut",
+                            }}
+                            className="absolute inset-x-0 h-12 bg-gradient-to-b from-emerald-400/20 via-emerald-400/30 to-transparent rounded-full blur-md"
+                          ></motion.div>
+
+                          {/* Camera effects */}
+                          <div className="absolute inset-0">
+                            <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Status panel */}
+                      <Card className="mt-4 bg-gray-900/70 border-gray-800/50">
+                        <CardContent className="p-3 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              {status === "scanning" ? (
+                                <Clock
+                                  size={16}
+                                  className="text-emerald-300 animate-pulse"
+                                />
+                              ) : (
+                                <CheckCircle
+                                  size={16}
+                                  className="text-emerald-400"
+                                />
+                              )}
+                              <span className="text-sm font-medium text-emerald-300">
+                                {status === "scanning"
+                                  ? "Processing Receipt..."
+                                  : "Receipt Processed"}
+                              </span>
+                            </div>
+                            <Badge
+                              variant={
+                                status === "complete" ? "default" : "outline"
+                              }
+                              className={`text-xs ${
+                                status === "complete"
+                                  ? "bg-emerald-600"
+                                  : "bg-emerald-950/30 border-emerald-900/30"
+                              }`}
+                            >
+                              {status === "complete"
+                                ? "Complete"
+                                : "In Progress"}
+                            </Badge>
+                          </div>
+
+                          <Progress
+                            value={progress}
+                            className="h-1.5 bg-gray-800"
+                          >
+                            <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"></div>
+                          </Progress>
+
+                          {status === "complete" && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.2 }}
+                              className="space-y-2"
+                            >
+                              <div className="flex items-center justify-between text-xs text-gray-300">
+                                <div className="flex items-center gap-1.5">
+                                  <Receipt size={14} />
+                                  <span>Coffee Shop</span>
+                                </div>
+                                <span className="font-medium text-emerald-300">
+                                  $12.45
+                                </span>
+                              </div>
+
+                              <div className="flex items-center justify-between text-xs text-gray-400">
+                                <div className="flex items-center gap-1.5">
+                                  <Sparkles size={14} />
+                                  <span>
+                                    Auto-categorized as "Food & Drink"
+                                  </span>
+                                </div>
+                                <ChevronRight size={14} />
+                              </div>
+                            </motion.div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                  </Tabs>
+
+                  {/* Recent scans preview */}
+                  {status === "complete" && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="mt-2"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-medium text-gray-300">
+                          Recent Receipts
+                        </h4>
+                        <Badge
+                          variant="outline"
+                          className="text-xs bg-transparent border-gray-700/50 text-gray-400"
+                        >
+                          View All
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          {
+                            name: "Grocery Store",
+                            amount: "$67.35",
+                            color: "bg-blue-500/20",
+                          },
+                          {
+                            name: "Gas Station",
+                            amount: "$45.20",
+                            color: "bg-purple-500/20",
+                          },
+                        ].map((item, i) => (
+                          <Card
+                            key={i}
+                            className={`${item.color} border-gray-800/30 hover:border-gray-700/50 transition-all duration-200 cursor-pointer`}
+                          >
+                            <CardContent className="p-2 flex flex-col">
+                              <span className="text-xs font-medium text-gray-300">
+                                {item.name}
+                              </span>
+                              <span className="text-lg font-semibold text-white">
+                                {item.amount}
+                              </span>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
               </div>
+            </CardContent>
 
-              {/* Processing indicator */}
-              <div className="mt-3 bg-gray-800 rounded-lg p-3 border border-emerald-900/30">
-                <div className="flex items-center">
-                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                  <span className="ml-2 text-sm text-emerald-300">
-                    Processing Receipt...
-                  </span>
-                </div>
-                <div className="mt-2 h-1.5 w-full bg-gray-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 w-2/3 rounded-full"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+            {/* 3D lighting effects */}
+            <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-gray-800/10 to-transparent pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+          </Card>
+        </motion.div>
 
-        {/* Decorative elements */}
-        <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-br from-emerald-500 to-teal-400 opacity-30 blur-2xl"></div>
+        {/* Decorative background elements */}
+        <div className="absolute -bottom-12 -right-12 w-36 h-36 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 opacity-20 blur-2xl"></div>
+        <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full bg-gradient-to-br from-teal-600 to-emerald-500 opacity-10 blur-3xl"></div>
+
+        {/* Phone reflection */}
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-4 bg-black/30 blur-md rounded-full"></div>
       </div>
     </div>
   );
 };
+
+export default ReceiptVisualization;

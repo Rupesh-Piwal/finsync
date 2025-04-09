@@ -5,7 +5,7 @@ import { HowItWorks } from "@/components/features/HowItWorks";
 import { Footer } from "@/components/footer/Footer";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { MarketingLayout } from "@/components/layout/MarketingLayout";
-import { redirect } from "next/navigation";
+
 
 
 const Page = async () => {

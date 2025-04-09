@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { SectionHeader } from "../shared/SectionHeader";
+import { Badge } from "../ui/badge";
 
 export const HowItWorks = () => {
   return (
@@ -44,9 +45,12 @@ export const HowItWorks = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-block px-4 py-1 bg-white/10 backdrop-blur-sm rounded-full mb-4">
-            <span className="text-sm font-medium text-gray-300">Demo</span>
-          </div>
+          <Badge
+            variant="outline"
+            className="px-4 py-1.5 rounded-full border-emerald-800/40 bg-emerald-950/30 text-emerald-300 flex items-center gap-2 w-fit mx-auto md:mx-0 mb-4"
+          >
+            <span className="font-medium">Demo</span>
+          </Badge>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             See WaitFast in action
           </h2>

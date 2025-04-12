@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export const CallToAction = () => {
   return (
-    <div className="w-full py-28 px-4 relative overflow-hidden ">
+    <div className="w-full py-28 px-4 relative overflow-hidden bg-black">
       <div className="max-w-6xl mx-auto text-center relative z-10 space-y-10">
         <div className="space-y-6">
           <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">

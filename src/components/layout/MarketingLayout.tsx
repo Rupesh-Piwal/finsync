@@ -6,8 +6,8 @@ export const MarketingLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="min-h-screen bg-black text-gray-100 flex flex-col">
       <Spotlight
-        className="-top-20 left-0 md:-top-5 md:left-30"
-        fill="#14B8A6" // Bright teal color that complements both teal and emerald
+        className="-top-0 left-18 md:-top-5 md:left-10"
+        fill="#B7B9BE"
       />
       <GridBackground>{children}</GridBackground>
     </div>

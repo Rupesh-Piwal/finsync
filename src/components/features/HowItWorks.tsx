@@ -6,49 +6,18 @@ import { Badge } from "../ui/badge";
 
 export const HowItWorks = () => {
   return (
-    <div className="w-full py-24 px-4 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div
-        className="absolute inset-0 opacity-5 bg-[radial-gradient(circle,_rgba(0,200,200,0.15)_1.5px,_transparent_1.5px)] bg-center bg-repeat"
-        style={{ backgroundSize: "30px 30px" }}
-      ></div>
-
-      {/* Dynamic blobs */}
-      <motion.div
-        className="absolute -top-20 -left-20 w-96 h-96 rounded-full bg-gradient-to-r from-blue-600/10 to-purple-600/10 blur-3xl"
-        animate={{
-          scale: [1, 1.2, 1],
-          x: [0, 20, 0],
-          y: [0, 30, 0],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      <motion.div
-        className="absolute -bottom-40 -right-20 w-96 h-96 rounded-full bg-gradient-to-l from-purple-600/10 to-blue-600/10 blur-3xl"
-        animate={{
-          scale: [1, 1.3, 1],
-          x: [0, -30, 0],
-          y: [0, -20, 0],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
+    <div className="w-full py-24 px-4 relative overflow-hidden bg-black text-center">
+      <div className="absolute top-50 left-30 w-45 h-40 md:w-100 md:h-80 rounded-full bg-[#0D9488]/20 blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-100 h-80 rounded-full bg-[#10B981]/20 blur-3xl"></div>
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
           <Badge
             variant="outline"
-            className="px-4 py-1.5 rounded-full border-emerald-800/40 bg-emerald-950/30 text-emerald-300 flex items-center gap-2 w-fit mx-auto md:mx-0 mb-4"
+            className="px-4 py-1.5 rounded-full border-emerald-800/40 bg-emerald-950/30 text-emerald-300 flex items-center gap-2 w-fit mx-auto  mb-4"
           >
+            <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-emerald-400 animate-ping opacity-75"></div>
+
             <span className="font-medium">Demo</span>
           </Badge>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">

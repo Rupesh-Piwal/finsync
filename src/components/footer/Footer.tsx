@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <footer className="w-full py-12 px-4 ">
+    <footer className="w-full py-12 px-4 bg-black">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-12">
           <Logo />
@@ -32,7 +32,6 @@ const FooterLinks = () => {
       title: "Product",
       links: ["Features", "Pricing", "Security"],
     },
-    
   ];
 
   return (

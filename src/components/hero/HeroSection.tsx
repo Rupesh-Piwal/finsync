@@ -23,10 +23,6 @@ export const HeroSection = () => {
     <div className="w-full flex flex-col md:flex-row items-center justify-between px-6 py-20 md:py-32 md:px-10 max-w-7xl mx-auto relative overflow-hidden">
       <HeroContent />
       <ReceiptVisualization />
-
-      {/* Background decorative elements */}
-      <div className="absolute -top-40 -left-40 w-80 h-80 rounded-full bg-emerald-700/10 blur-3xl"></div>
-      <div className="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-teal-700/10 blur-3xl"></div>
     </div>
   );
 };
@@ -60,27 +56,15 @@ const HeroContent = () => {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 md:justify-start justify-center">
+      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 md:justify-start justify-center mx-auto">
         <Button
           asChild
           size="lg"
-          className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-full px-8 font-medium shadow-lg shadow-emerald-900/30 sm:w-[70%]"
+          className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-[8px] px-8 font-medium shadow-lg shadow-emerald-900/30 w-[80%] md:w-[300px] text-center mx-auto"
         >
           <Link href="/sign-in" className="flex items-center gap-2">
             Try For Free
             <ArrowRight size={16} />
-          </Link>
-        </Button>
-
-        <Button
-          variant="outline"
-          size="lg"
-          asChild
-          className="border-2 border-emerald-500/20 bg-gray-950/50 backdrop-blur-sm text-emerald-300 hover:text-emerald-200 hover:bg-gray-900/70 rounded-full px-8 font-medium"
-        >
-          <Link href="/sign-up" className="flex items-center gap-2">
-            <Play size={16} className="fill-emerald-300" />
-            Watch Demo
           </Link>
         </Button>
       </div>
@@ -161,7 +145,6 @@ const ReceiptVisualization = () => {
                       >
                         Scan
                       </TabsTrigger>
-                      
                     </TabsList>
 
                     <TabsContent value="scan" className="mt-2">

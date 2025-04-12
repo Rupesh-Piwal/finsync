@@ -74,8 +74,11 @@ export const FeatureCards = () => {
   ];
 
   return (
-    <div className=" w-full py-24 px-4 relative">
-      {/* Modern background elements */}
+    <div className=" w-full py-24 px-4 relative bg-black">
+      <div className="absolute top-20 left-40 w-40 h-40 md:w-80 md:h-80 rounded-full bg-[#134E4A]/40 blur-3xl"></div>
+
+      <div className="absolute bottom-5 right-10 w-40 h-40 md:w-70 md:h-70 rounded-full bg-[#047857]/40 blur-3xl"></div>
+
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl animate-pulse"></div>
         <div
@@ -84,7 +87,6 @@ export const FeatureCards = () => {
         ></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-grid-pattern opacity-5"></div>
       </div>
-
       <div className="max-w-7xl mx-auto relative z-10">
         <SectionHeader
           subtitle="Powerful Features"

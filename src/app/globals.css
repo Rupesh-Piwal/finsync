@@ -135,3 +135,51 @@
     transform: translate(-50%, -40%) scale(1);
   }
 }
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-scan {
+    animation: scan 3s ease-in-out infinite;
+  }
+
+  .animate-grow {
+    animation: grow 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(6deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(6deg);
+  }
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    top: 0;
+    opacity: 0.7;
+  }
+  50% {
+    top: calc(100% - 1px);
+    opacity: 0.9;
+  }
+}
+
+@keyframes grow {
+  0%,
+  100% {
+    width: 0;
+    opacity: 0;
+  }
+  50% {
+    width: 16px;
+    opacity: 1;
+  }
+}

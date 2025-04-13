@@ -4,8 +4,10 @@ import { LayoutDashboard, BadgePlus } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Logo } from "./ui/logo";
+import { checkUser } from "@/lib/checkUser";
 
 const Header = async () => {
+  await checkUser();
   return (
     <header className="fixed top-0 w-full z-50  backdrop-blur-md">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">

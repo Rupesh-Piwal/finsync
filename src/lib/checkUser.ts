@@ -1,9 +1,9 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "./prisma";
-import { error, log } from "console";
 
 export const checkUser = async () => {
   const user = await currentUser();
+  console.log("Clerk user:", user?.id);
 
   if (!user) {
     return null;
@@ -17,6 +17,7 @@ export const checkUser = async () => {
     });
 
     if (loggedInUser) {
+      console.log("User already in DB:", loggedInUser.email);
       return loggedInUser;
     }
 
@@ -31,12 +32,14 @@ export const checkUser = async () => {
       },
     });
 
+    console.log("✅ Created new user in DB:", newUser.email);
+
     return newUser;
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.log(error.message);
     } else {
-      console.log("Unknown error", error);
+      console.error("❌ Error in checkUser():", error);
     }
   }
 };

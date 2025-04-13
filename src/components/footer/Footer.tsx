@@ -21,7 +21,9 @@ const Logo = () => {
       <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-900/30">
         <span className="text-gray-900 font-bold text-lg">F</span>
       </div>
-      <span className="font-semibold text-xl text-white">FinSync</span>
+      <span className="font-semibold text-xl bg-gradient-to-r from-[#FDFDFD] to-[#B7B9BE]/80 bg-clip-text text-transparent">
+        FinSync
+      </span>
     </div>
   );
 };

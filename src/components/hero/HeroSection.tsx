@@ -40,16 +40,16 @@ const HeroContent = () => {
         </Badge>
 
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-          <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-emerald-300 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-emerald-300 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
             Transform Receipts
           </span>
           <br />
-          <span className="bg-gradient-to-r from-teal-400 via-emerald-300 to-teal-300 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-teal-400 via-emerald-300 to-teal-200 bg-clip-text text-transparent">
             Into Insights
           </span>
         </h1>
 
-        <p className="text-lg text-gray-300 leading-relaxed max-w-lg mx-auto md:mx-0">
+        <p className="text-lg bg-gradient-to-r from-[#FDFDFD] to-[#B7B9BE]/80 bg-clip-text text-transparent leading-relaxed max-w-lg mx-auto md:mx-0">
           Our AI instantly scans and converts your receipts and bills into
           organized expenses. No more manual data entry — just snap, scan, and
           track.
@@ -60,7 +60,7 @@ const HeroContent = () => {
         <Button
           asChild
           size="lg"
-          className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-[8px] px-8 font-medium shadow-lg shadow-emerald-900/30 w-[80%] md:w-[300px] text-center mx-auto"
+          className="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-[8px] px-8 font-medium shadow-lg shadow-emerald-900/30 w-[80%] md:w-[300px] text-center mx-auto md:mx-0"
         >
           <Link href="/sign-in" className="flex items-center gap-2">
             Try For Free

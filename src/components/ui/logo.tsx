@@ -129,7 +129,7 @@ export function Logo({
               "font-bold tracking-tight",
               sizes[size].text,
               variant === "default"
-                ? "bg-gradient-to-r from-emerald-400 via-teal-500 to-emerald-400 bg-clip-text text-transparent"
+                ? "bg-gradient-to-r from-[#FDFDFD] to-[#B7B9BE]/80 bg-clip-text text-transparent"
                 : "text-zinc-800 dark:text-white"
             )}
           >

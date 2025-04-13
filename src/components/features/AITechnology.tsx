@@ -17,12 +17,12 @@ export const AITechnology = () => {
               <h2 className="text-sm font-medium text-emerald-400 uppercase tracking-wide">
                 Advanced AI Technology
               </h2>
-              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-300 to-teal-200 bg-clip-text text-transparent">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#FDFDFD] to-[#B7B9BE]/70 bg-clip-text text-transparent">
                 Built for Accuracy & Speed
               </h3>
             </div>
 
-            <p className="text-gray-300 text-base sm:text-lg">
+            <p className="text-[#B7B9BE]/70 text-base sm:text-lg">
               Our proprietary AI engine uses computer vision and machine
               learning to process receipts with 99.8% accuracy, faster than any
               human could.

@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import { LayoutDashboard, BadgePlus } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import Image from "next/image";
 import { Logo } from "./ui/logo";
 
 const Header = async () => {

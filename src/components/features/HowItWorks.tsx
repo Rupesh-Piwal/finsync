@@ -14,16 +14,18 @@ export const HowItWorks = () => {
         <div className="text-center mb-12">
           <Badge
             variant="outline"
-            className="px-4 py-1.5 rounded-full border-emerald-800/40 bg-emerald-950/30 text-emerald-300 flex items-center gap-2 w-fit mx-auto  mb-4"
+            className="px-4 py-1.5 rounded-full border-emerald-800/40 bg-emerald-950/30 text-emerald-300 flex items-center gap-2 w-fit mx-auto mb-6"
           >
-            <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-emerald-400 animate-ping opacity-75"></div>
-
+            <span className="relative flex items-center ">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
             <span className="font-medium">Demo</span>
           </Badge>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-[#FDFDFD] to-[#B7B9BE]/70 bg-clip-text text-transparent mb-6">
             See WaitFast in action
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl bg-gradient-to-r from-[#FDFDFD]/80 to-[#B7B9BE]/90 bg-clip-text text-transparent max-w-3xl mx-auto">
             Watch how easy it is to create beautiful waitlist pages in minutes
           </p>
         </div>

@@ -9,13 +9,13 @@ services:
       - postgres
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/mydb
-        - NEXTAUTH_URL=http://localhost:3000
       - AUTH_TRUST_HOST=true
       - NODE_ENV=development
     volumes:
       - .:/app
       - /app/node_modules
       - /app/.next
+    command: sh -c "npx prisma migrate dev --name schema_update && npm run dev"
 
   postgres:
     image: postgres:15

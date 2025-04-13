@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} antialiased bg-[#1A1A1A]`}>
+        <body
+          className={`${inter.className} antialiased bg-[#000000] text-[#ffffff]`}
+        >
           <Header />
           {children}
         </body>

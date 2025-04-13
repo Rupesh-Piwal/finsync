@@ -8,7 +8,7 @@ import { Logo } from "./ui/logo";
 const Header = async () => {
   return (
     <header className="fixed top-0 w-full z-50  backdrop-blur-md">
-      <nav className="container mx-auto px-4 py-3 flex items-center justify-between">
+      <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/">
           <Logo />
         </Link>

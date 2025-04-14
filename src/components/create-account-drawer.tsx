@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -21,10 +21,13 @@ import {
 } from "./ui/select";
 import { Switch } from "./ui/switch";
 import { accountSchema } from "@/app/lib/schema";
+import { createAccount } from "@/lib/actions/dashboard";
 
 type CreateAccountDrawerProps = {
   children: React.ReactNode;
 };
+
+type AccountType = "CURRENT" | "SAVINGS";
 
 const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
   const [open, setOpen] = useState(false);
@@ -44,6 +47,31 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
       isDefault: false,
     },
   });
+
+  const {
+    loading: createAccountLoading,
+    fn: createAccountFn,
+    error,
+    data: newAccount,
+  } = useFetch(createAccount);
+
+  const onSubmit = async (data) => {
+    await createAccountFn(data);
+  };
+
+  useEffect(() => {
+    if (newAccount) {
+      toast.success("Account created successfully");
+      reset();
+      setOpen(false);
+    }
+  }, [newAccount, reset]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message || "Failed to create account");
+    }
+  }, [error]);
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
@@ -52,7 +80,7 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
           <DrawerTitle className="text-white">Create New Account</DrawerTitle>
         </DrawerHeader>
         <div className="px-4 pb-4">
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
               <label
                 htmlFor="name"
@@ -64,6 +92,7 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
                 id="name"
                 placeholder="e.g., Main Checking"
                 className="bg-gray-950 border-gray-800 placeholder:text-gray-400 focus:border-teal-500 focus:ring-0"
+                {...register("name")}
               />
             </div>
 
@@ -74,7 +103,10 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
               >
                 Account Type
               </label>
-              <Select>
+              <Select
+                onValueChange={(value: AccountType) => setValue("type", value)}
+                defaultValue={watch("type")}
+              >
                 <SelectTrigger
                   id="type"
                   className="bg-gray-950 border-gray-800 focus:border-teal-500"
@@ -89,6 +121,9 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
                   <SelectItem value="SAVINGS">Savings</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.type && (
+                <p className="text-sm text-red-500">{errors.type.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -104,7 +139,11 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
                 step="0.01"
                 placeholder="0.00"
                 className="bg-gray-950 border-gray-800 placeholder:text-gray-400 focus:border-teal-500 focus:ring-0"
+                {...register("balance")}
               />
+              {errors.balance && (
+                <p className="text-sm text-red-500">{errors.balance.message}</p>
+              )}
             </div>
 
             <div className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-950 p-3">
@@ -122,6 +161,8 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
               <Switch
                 id="isDefault"
                 className="data-[state=checked]:bg-teal-500"
+                checked={watch("isDefault")}
+                onCheckedChange={(checked) => setValue("isDefault", checked)}
               />
             </div>
 
@@ -138,8 +179,16 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
               <Button
                 type="submit"
                 className="flex-1 bg-teal-600 hover:bg-teal-500 text-white"
+                disabled={createAccountLoading}
               >
-                Create Account
+                {createAccountLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </Button>
             </div>
           </form>

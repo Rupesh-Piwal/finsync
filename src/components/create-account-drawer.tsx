@@ -20,8 +20,11 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Switch } from "./ui/switch";
-import { accountSchema } from "@/app/lib/schema";
+import { accountSchema, type AccountFormData } from "@/app/lib/schema";
 import { createAccount } from "@/lib/actions/dashboard";
+import { Loader2 } from "lucide-react";
+import { useFetch } from "@/hooks/use-fetch";
+import { toast } from "sonner";
 
 type CreateAccountDrawerProps = {
   children: React.ReactNode;
@@ -55,7 +58,7 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
     data: newAccount,
   } = useFetch(createAccount);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: AccountFormData) => {
     await createAccountFn(data);
   };
 
@@ -94,6 +97,9 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
                 className="bg-gray-950 border-gray-800 placeholder:text-gray-400 focus:border-teal-500 focus:ring-0"
                 {...register("name")}
               />
+              {errors.name && (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">

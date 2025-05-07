@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowUpRight, ArrowDownRight, CreditCard } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, Star } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { ChangeEvent, useEffect } from "react";
+import { toast } from "sonner";
+import Link from "next/link";
+import { useEffect, MouseEvent } from "react";
 
 import {
   Card,
@@ -12,13 +13,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
 
-import { toast } from "sonner";
 import { useFetch } from "@/hooks/use-fetch";
 import { updateDefaultAccount } from "@/lib/actions/account";
+import { SerializedAccount } from "@/types";
 
-export function AccountCard({ account }) {
+interface AccountCardProps {
+  account: SerializedAccount;
+}
+
+export function AccountCard({ account }: AccountCardProps) {
   const { name, type, balance, id, isDefault } = account;
 
   const {
@@ -28,14 +32,12 @@ export function AccountCard({ account }) {
     error,
   } = useFetch(updateDefaultAccount);
 
-  const handleDefaultChange = async (event:ChangeEvent) => {
-    event.preventDefault(); // Prevent navigation
-
+  const handleDefaultChange = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Prevent navigation
     if (isDefault) {
-      toast.warning("You need atleast 1 default account");
-      return; // Don't allow toggling off the default account
+      toast.warning("You need at least 1 default account");
+      return;
     }
-
     await updateDefaultFn(id);
   };
 
@@ -51,38 +53,78 @@ export function AccountCard({ account }) {
     }
   }, [error]);
 
+  const gradientClass =
+    type === "CURRENT"
+      ? "from-teal-900 to-gray-900"
+      : "from-teal-800 to-slate-900";
+
   return (
-    <Card className="hover:shadow-md transition-shadow group relative">
-      <Link href={`/account/${id}`}>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium capitalize">
-            {name}
-          </CardTitle>
-          <Switch
-            checked={isDefault}
-            onClick={handleDefaultChange}
-            disabled={updateDefaultLoading}
-          />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">
-            ${parseFloat(balance).toFixed(2)}
+    <Card className="relative group bg-gradient-to-br border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden text-gray-100 dark:text-white">
+      {/* Background layers */}
+      <div className="absolute inset-0 bg-gradient-to-br opacity-90 z-0 pointer-events-none"></div>
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-95 z-0`}
+      />
+      <div className="absolute -right-6 -top-6 w-24 h-24 bg-teal-500/20 rounded-full blur-xl z-0" />
+      <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-teal-600/10 rounded-full blur-xl z-0" />
+
+      {/* Card content */}
+      <Link href={`/account/${id}`} className="relative z-10 block">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b border-gray-700/30">
+          <div className="flex items-center space-x-2">
+            {isDefault && (
+              <Star className="h-4 w-4 text-teal-400 fill-teal-400" />
+            )}
+            <CardTitle className="text-sm font-medium capitalize">
+              {name}
+            </CardTitle>
           </div>
-          <p className="text-xs text-muted-foreground">
-            {type.charAt(0) + type.slice(1).toLowerCase()} Account
-          </p>
-        </CardContent>
-        <CardFooter className="flex justify-between text-sm text-muted-foreground">
           <div className="flex items-center">
-            <ArrowUpRight className="mr-1 h-4 w-4 text-green-500" />
+            <span className="text-xs mr-2 text-teal-400 font-medium">
+              {isDefault ? "Default" : "Set Default"}
+            </span>
+            <Switch
+              checked={isDefault}
+              onClick={handleDefaultChange}
+              disabled={updateDefaultLoading}
+              className="data-[state=checked]:bg-teal-500"
+            />
+          </div>
+        </CardHeader>
+
+        <CardContent className="pt-6 pb-4">
+          <div className="text-3xl font-bold tracking-tight mb-1 flex items-baseline">
+            <span className="text-lg mr-1 text-teal-400">$</span>
+            {balance.toFixed(2)}
+          </div>
+          <div className="flex items-center">
+            <span className="inline-block px-2 py-1 rounded-md text-xs font-medium bg-teal-500/20 text-teal-300 mr-2">
+              {type.charAt(0) + type.slice(1).toLowerCase()}
+            </span>
+            <p className="text-xs text-gray-400">Account</p>
+          </div>
+        </CardContent>
+
+        <div className="h-0.5 mx-4 bg-gradient-to-r from-transparent via-teal-500/30 to-transparent" />
+
+        <CardFooter className="flex justify-between py-4 text-sm text-gray-400">
+          <div className="flex items-center group-hover:text-teal-300 transition-colors">
+            <div className="p-1 rounded-full bg-teal-900/50 mr-2">
+              <ArrowUpRight className="h-3 w-3 text-teal-400" />
+            </div>
             Income
           </div>
-          <div className="flex items-center">
-            <ArrowDownRight className="mr-1 h-4 w-4 text-red-500" />
+          <div className="flex items-center group-hover:text-teal-300 transition-colors">
+            <div className="p-1 rounded-full bg-red-900/30 mr-2">
+              <ArrowDownRight className="h-3 w-3 text-red-400" />
+            </div>
             Expense
           </div>
         </CardFooter>
       </Link>
+
+      {/* Overlay hover effect */}
+      <div className="absolute inset-0 bg-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-5 pointer-events-none" />
     </Card>
   );
 }

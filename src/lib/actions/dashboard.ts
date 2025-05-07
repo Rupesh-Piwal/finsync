@@ -2,27 +2,12 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
 import { revalidatePath } from "next/cache";
-import { Decimal } from "@prisma/client/runtime/library";
-import { AccountType } from "@prisma/client";
-
-interface CreateAccountData {
-  name: string;
-  type: AccountType;
-  balance: string;
-  isDefault: boolean;
-}
-
-interface TransactionLike {
-  balance?: Decimal;
-  amount?: Decimal;
-  [key: string]: any;
-}
-
-interface SerializedTransaction {
-  balance?: number;
-  amount?: number;
-  [key: string]: any;
-}
+import {
+  CreateAccountData,
+  SerializedAccount,
+  SerializedTransaction,
+  TransactionLike,
+} from "@/types";
 
 const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
   const serialized: SerializedTransaction = {};
@@ -40,7 +25,15 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
   return serialized;
 };
 
-export async function getUserAccounts() {
+const serializeAccount = (obj: any): SerializedAccount => {
+  const serialized = { ...obj };
+  if (obj.balance && typeof obj.balance.toNumber === "function") {
+    serialized.balance = obj.balance.toNumber();
+  }
+  return serialized;
+};
+
+export async function getUserAccounts(): Promise<SerializedAccount[]> {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -66,7 +59,7 @@ export async function getUserAccounts() {
     });
 
     // Serialize accounts before sending to client
-    const serializedAccounts = accounts.map(serializeTransaction);
+    const serializedAccounts = accounts.map(serializeAccount);
 
     return serializedAccounts;
   } catch (error) {
@@ -75,6 +68,7 @@ export async function getUserAccounts() {
     } else {
       console.error("An unknown error occurred:", error);
     }
+    return []; // Ensure consistent return type
   }
 }
 

@@ -33,7 +33,8 @@ export function AccountCard({ account }: AccountCardProps) {
   } = useFetch(updateDefaultAccount);
 
   const handleDefaultChange = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // Prevent navigation
+    e.preventDefault(); 
+
     if (isDefault) {
       toast.warning("You need at least 1 default account");
       return;
@@ -55,12 +56,11 @@ export function AccountCard({ account }: AccountCardProps) {
 
   const gradientClass =
     type === "CURRENT"
-      ? "from-teal-900 to-gray-900"
-      : "from-teal-800 to-slate-900";
+      ? "from-teal-900/20 to-gray-900"
+      : "from-teal-800/20 to-slate-900/80";
 
   return (
-    <Card className="relative group bg-gradient-to-br border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden text-gray-100 dark:text-white">
-      {/* Background layers */}
+    <Card className="relative group bg-gradient-to-br border border-teal-900/90 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden text-gray-100 dark:text-white">
       <div className="absolute inset-0 bg-gradient-to-br opacity-90 z-0 pointer-events-none"></div>
       <div
         className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-95 z-0`}
@@ -68,7 +68,7 @@ export function AccountCard({ account }: AccountCardProps) {
       <div className="absolute -right-6 -top-6 w-24 h-24 bg-teal-500/20 rounded-full blur-xl z-0" />
       <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-teal-600/10 rounded-full blur-xl z-0" />
 
-      {/* Card content */}
+      
       <Link href={`/account/${id}`} className="relative z-10 block">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b border-gray-700/30">
           <div className="flex items-center space-x-2">
@@ -122,9 +122,6 @@ export function AccountCard({ account }: AccountCardProps) {
           </div>
         </CardFooter>
       </Link>
-
-      {/* Overlay hover effect */}
-      <div className="absolute inset-0 bg-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-5 pointer-events-none" />
     </Card>
   );
 }

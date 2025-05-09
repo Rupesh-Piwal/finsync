@@ -1,9 +1,14 @@
-"use server"
+"use server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
 import { revalidatePath } from "next/cache";
-import { SerializedTransaction, TransactionLike } from "@/types";
-
+import {
+  AccountData,
+  SerializedAccount,
+  SerializedTransaction,
+  TransactionLike,
+} from "@/types";
+import { Account } from "@prisma/client";
 
 const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
   const serialized: SerializedTransaction = {};
@@ -21,7 +26,6 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
   return serialized;
 };
 
-
 const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   const serialized = { ...obj } as SerializedTransaction;
   if (obj.balance) {
@@ -33,7 +37,27 @@ const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   return serialized;
 };
 
-export async function getAccountWithTransactions(accountId: string) {
+const serializeAccount = (
+  account: Account & { _count: { transactions: number } }
+): SerializedAccount => {
+  return {
+    id: account.id,
+    userId: account.userId,
+    name: account.name,
+    type: account.type,
+    isDefault: account.isDefault,
+    createdAt: account.createdAt,
+    updatedAt: account.updatedAt,
+    balance: account.balance.toNumber(),
+    _count: {
+      transactions: account._count.transactions,
+    },
+  };
+};
+
+export async function getAccountWithTransactions(
+  accountId: string
+): Promise<AccountData> {
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -58,10 +82,10 @@ export async function getAccountWithTransactions(accountId: string) {
     },
   });
 
-  if (!account) return null;
+  if (!account) throw new Error("Account not found");
 
   return {
-    ...serializeDecimal(account),
+    ...serializeAccount(account),
     transactions: account.transactions.map(serializeDecimal),
   };
 }

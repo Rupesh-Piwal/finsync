@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 import { Account, AccountType } from "@prisma/client";
 
 export interface CreateAccountData {
@@ -10,6 +9,12 @@ export interface CreateAccountData {
 
 export interface AccountCardProps {
   account: Account;
+}
+
+export interface AccountPageProps {
+  params: {
+    id: string;
+  };
 }
 
 export interface TransactionLike {
@@ -24,20 +29,13 @@ export interface SerializedTransaction {
   amount?: number;
 }
 
-
-
-// export interface Account {
-//   id: string;
-//   name: string;
-//   type: AccountType;
-//   balance: Decimal;
-//   isDefault: boolean;
-//   userId: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   transactions?: any;
-// }
-
 export interface SerializedAccount extends Omit<Account, "balance"> {
   balance: number;
+  _count: {
+    transactions: number;
+  };
+}
+
+export interface AccountData extends SerializedAccount {
+  transactions: SerializedTransaction[];
 }

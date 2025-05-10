@@ -24,9 +24,22 @@ export interface TransactionLike {
 }
 
 export interface SerializedTransaction {
-  [key: string]: any;
+  id: string;
+  type: string;
+  amount: number;
   balance?: number;
-  amount?: number;
+  description?: string;
+  date: string; // serialized DateTime
+  category: string;
+  isRecurring: boolean;
+  recurringInterval?: string;
+  nextRecurringDate?: string;
+  lastProcessed?: string;
+  status: string;
+  userId: string;
+  accountId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface SerializedAccount extends Omit<Account, "balance"> {
@@ -37,5 +50,9 @@ export interface SerializedAccount extends Omit<Account, "balance"> {
 }
 
 export interface AccountData extends SerializedAccount {
+  transactions: SerializedTransaction[];
+}
+
+export interface TransactionTableProps {
   transactions: SerializedTransaction[];
 }

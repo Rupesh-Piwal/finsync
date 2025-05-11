@@ -27,17 +27,28 @@ import {
 import { cn } from "@/lib/utils";
 import { TransactionTableProps } from "@/types";
 import { format } from "date-fns";
-import { Clock, MoreHorizontal, RefreshCw } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  MoreHorizontal,
+  RefreshCw,
+} from "lucide-react";
 import { useState } from "react";
 
 const RECURRING_INTERVALS: Record<string, string> = {
-  daily: "Daily",
-  weekly: "Weekly",
-  monthly: "Monthly",
+  DAILY: "Daily",
+  WEEKLY: "Weekly",
+  MONTHLY: "Monthly",
+  YEARLY: "Yearly",
 };
 
 const TransactionTable = ({ transactions }: TransactionTableProps) => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [sortConfig, setSortConfig] = useState({
+    field: "date",
+    direction: "desc",
+  });
 
   const handleSelect = (id: number) => {
     setSelectedIds((current) =>
@@ -45,6 +56,22 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
         ? current.filter((item) => item !== id)
         : [...current, id]
     );
+  };
+
+  const handleSelectAll = () => {
+    setSelectedIds((current) =>
+      current.length === paginatedTransactions.length
+        ? []
+        : paginatedTransactions.map((t) => t.id)
+    );
+  };
+
+  const handleSort = (field) => {
+    setSortConfig((current) => ({
+      field,
+      direction:
+        current.field === field && current.direction === "asc" ? "desc" : "asc",
+    }));
   };
 
   return (
@@ -55,11 +82,23 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
           <TableHeader className="bg-gradient-to-b from-[#1a1a1a] to-[#121212]">
             <TableRow className="border-b border-gray-700 hover:bg-gray-800">
               <TableHead className="w-12 text-teal-400">
-                <Checkbox className="border-teal-500 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500" />
+                <Checkbox
+                  onCheckedChange={handleSelectAll}
+                  className="border-teal-500 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
+                />
               </TableHead>
-              <TableHead className="cursor-pointer text-teal-400 font-semibold">
+              <TableHead
+                onClick={() => handleSort("date")}
+                className="cursor-pointer text-teal-400 font-semibold"
+              >
                 <div className="flex items-center space-x-1">
-                  <span>Date</span>
+                  Date
+                  {sortConfig.field === "date" &&
+                    (sortConfig.direction === "asc" ? (
+                      <ChevronUp className="ml-1 h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    ))}
                 </div>
               </TableHead>
               <TableHead className="text-teal-400 font-semibold">
@@ -129,11 +168,9 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                             className="gap-1 bg-teal-900/60 text-teal-300 border border-teal-800 hover:bg-teal-800/60 rounded-full px-2 py-1 text-xs"
                           >
                             <RefreshCw className="h-3 w-3" />
-                            {
-                              RECURRING_INTERVALS[
-                                transaction.recurringInterval ?? ""
-                              ]
-                            }
+                            {RECURRING_INTERVALS[
+                              transaction.recurringInterval ?? ""
+                            ] ?? "—"}
                           </Badge>
                         </TooltipTrigger>
                         <TooltipContent className="bg-[#1e1e1e] border border-gray-700 text-gray-100 shadow-md shadow-black/30 rounded-md p-3 text-sm">
@@ -142,10 +179,11 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                               Next Payment:
                             </div>
                             <div>
-                              {format(
-                                new Date(transaction.nextRecurringDate ?? ""),
-                                "PPP"
-                              )}
+                              {transaction.nextRecurringDate &&
+                                format(
+                                  new Date(transaction.nextRecurringDate),
+                                  "PPP"
+                                )}
                             </div>
                           </div>
                         </TooltipContent>

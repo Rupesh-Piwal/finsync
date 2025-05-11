@@ -1,3 +1,5 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,18 +25,28 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { SerializedTransaction, TransactionTableProps } from "@/types";
+import { TransactionTableProps } from "@/types";
 import { format } from "date-fns";
 import { Clock, MoreHorizontal, RefreshCw } from "lucide-react";
+import { useState } from "react";
 
-const RECURRING_INTERVALS = {
-  DAILY: "Daily",
-  WEEKLY: "Weekly",
-  MONTHLY: "Monthly",
-  YEARLY: "Yearly",
+const RECURRING_INTERVALS: Record<string, string> = {
+  daily: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly",
 };
 
 const TransactionTable = ({ transactions }: TransactionTableProps) => {
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  const handleSelect = (id: number) => {
+    setSelectedIds((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
+  };
+
   return (
     <div className="bg-[#0d0d0d]/80 backdrop-blur-md shadow-inner shadow-black/20 text-gray-100 rounded-2xl p-4">
       {/* Transactions Table */}
@@ -76,7 +88,11 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                 className="border-b border-gray-800 hover:bg-gray-800/30 hover:shadow-lg hover:shadow-black/10 transition-all duration-200"
               >
                 <TableCell>
-                  <Checkbox className="border-gray-600 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500" />
+                  <Checkbox
+                    checked={selectedIds.includes(Number(transaction.id))}
+                    onCheckedChange={() => handleSelect(Number(transaction.id))}
+                    className="border-gray-600 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
+                  />
                 </TableCell>
                 <TableCell className="text-gray-300 text-sm">
                   {format(new Date(transaction.date), "PP")}
@@ -113,7 +129,11 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                             className="gap-1 bg-teal-900/60 text-teal-300 border border-teal-800 hover:bg-teal-800/60 rounded-full px-2 py-1 text-xs"
                           >
                             <RefreshCw className="h-3 w-3" />
-                            {RECURRING_INTERVALS[transaction.recurringInterval]}
+                            {
+                              RECURRING_INTERVALS[
+                                transaction.recurringInterval ?? ""
+                              ]
+                            }
                           </Badge>
                         </TooltipTrigger>
                         <TooltipContent className="bg-[#1e1e1e] border border-gray-700 text-gray-100 shadow-md shadow-black/30 rounded-md p-3 text-sm">
@@ -123,7 +143,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                             </div>
                             <div>
                               {format(
-                                new Date(transaction.nextRecurringDate),
+                                new Date(transaction.nextRecurringDate ?? ""),
                                 "PPP"
                               )}
                             </div>

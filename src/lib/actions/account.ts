@@ -1,4 +1,5 @@
 "use server";
+
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
 import { revalidatePath } from "next/cache";
@@ -8,10 +9,11 @@ import {
   SerializedTransaction,
   TransactionLike,
 } from "@/types";
-import { Account } from "@prisma/client";
+import { Account, Transaction } from "@prisma/client";
 
+// Helper function to serialize a transaction
 const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
-  const serialized: SerializedTransaction = {};
+  const serialized = {} as SerializedTransaction;
 
   for (const key in obj) {
     if (key === "balance" && obj.balance) {
@@ -19,13 +21,14 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
     } else if (key === "amount" && obj.amount) {
       serialized.amount = obj.amount.toNumber();
     } else {
-      serialized[key] = obj[key];
+      (serialized as any)[key] = (obj as any)[key];
     }
   }
 
   return serialized;
 };
 
+// Similar to above, just simplified
 const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   const serialized = { ...obj } as SerializedTransaction;
   if (obj.balance) {
@@ -37,6 +40,7 @@ const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   return serialized;
 };
 
+// Serialize an account with transaction count
 const serializeAccount = (
   account: Account & { _count: { transactions: number } }
 ): SerializedAccount => {
@@ -55,6 +59,7 @@ const serializeAccount = (
   };
 };
 
+// Get account with all transactions for the logged-in user
 export async function getAccountWithTransactions(
   accountId: string
 ): Promise<AccountData> {
@@ -90,7 +95,13 @@ export async function getAccountWithTransactions(
   };
 }
 
-export async function updateDefaultAccount(accountId: string) {
+// Set the default account for the user
+export async function updateDefaultAccount(
+  accountId: string
+): Promise<
+  | { success: true; data: SerializedTransaction }
+  | { success: false; error: string }
+> {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -99,11 +110,9 @@ export async function updateDefaultAccount(accountId: string) {
       where: { clerkUserId: userId },
     });
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    if (!user) throw new Error("User not found");
 
-    // First, unset any existing default account
+    // Unset current default account
     await db.account.updateMany({
       where: {
         userId: user.id,
@@ -112,7 +121,7 @@ export async function updateDefaultAccount(accountId: string) {
       data: { isDefault: false },
     });
 
-    // Then set the new default account
+    // Set new default account
     const account = await db.account.update({
       where: {
         id: accountId,
@@ -123,10 +132,74 @@ export async function updateDefaultAccount(accountId: string) {
 
     revalidatePath("/dashboard");
     return { success: true, data: serializeTransaction(account) };
-  } catch (error) {
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
-    return { success: false, error: "An unknown error occurred" };
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error.message : "Unknown error";
+    return { success: false, error: err };
+  }
+}
+
+// Delete multiple transactions and update balances
+export async function bulkDeleteTransactions(
+  transactionIds: string[]
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    const transactions = await db.transaction.findMany({
+      where: {
+        id: { in: transactionIds },
+        userId: user.id,
+      },
+    });
+
+    const accountBalanceChanges: Record<string, number> = transactions.reduce(
+      (acc: Record<string, number>, transaction: Transaction) => {
+        const change =
+          transaction.type === "EXPENSE"
+            ? transaction.amount.toNumber()
+            : -transaction.amount.toNumber();
+
+        acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change;
+        return acc;
+      },
+      {}
+    );
+
+    await db.$transaction(async (tx) => {
+      await tx.transaction.deleteMany({
+        where: {
+          id: { in: transactionIds },
+          userId: user.id,
+        },
+      });
+
+      for (const [accountId, balanceChange] of Object.entries(
+        accountBalanceChanges
+      )) {
+        await tx.account.update({
+          where: { id: accountId },
+          data: {
+            balance: {
+              increment: balanceChange,
+            },
+          },
+        });
+      }
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/account/[id]");
+
+    return { success: true };
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error.message : "Unknown error";
+    return { success: false, error: err };
   }
 }

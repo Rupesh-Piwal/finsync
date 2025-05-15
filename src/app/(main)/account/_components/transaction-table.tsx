@@ -58,21 +58,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
     );
   };
 
-  const handleSelectAll = () => {
-    setSelectedIds((current) =>
-      current.length === paginatedTransactions.length
-        ? []
-        : paginatedTransactions.map((t) => t.id)
-    );
-  };
-
-  const handleSort = (field) => {
-    setSortConfig((current) => ({
-      field,
-      direction:
-        current.field === field && current.direction === "asc" ? "desc" : "asc",
-    }));
-  };
+  
 
   return (
     <div className="bg-[#0d0d0d]/80 backdrop-blur-md shadow-inner shadow-black/20 text-gray-100 rounded-2xl p-4">
@@ -83,12 +69,12 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
             <TableRow className="border-b border-gray-700 hover:bg-gray-800">
               <TableHead className="w-12 text-teal-400">
                 <Checkbox
-                  onCheckedChange={handleSelectAll}
+                  // onCheckedChange={handleSelectAll}
                   className="border-teal-500 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
                 />
               </TableHead>
               <TableHead
-                onClick={() => handleSort("date")}
+                // onClick={() => handleSort("date")}
                 className="cursor-pointer text-teal-400 font-semibold"
               >
                 <div className="flex items-center space-x-1">

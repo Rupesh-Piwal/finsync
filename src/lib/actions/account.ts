@@ -30,7 +30,7 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
 
 // Similar to above, just simplified
 const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
-  const serialized = { ...obj } as SerializedTransaction;
+  const serialized = obj as unknown as SerializedTransaction;
   if (obj.balance) {
     serialized.balance = obj.balance.toNumber();
   }

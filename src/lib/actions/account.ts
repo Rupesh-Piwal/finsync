@@ -1,36 +1,39 @@
 "use server";
-
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
 import { revalidatePath } from "next/cache";
 import {
   AccountData,
+  BulkDeleteResult,
   SerializedAccount,
   SerializedTransaction,
   TransactionLike,
 } from "@/types";
-import { Account, Transaction } from "@prisma/client";
+import { Account } from "@prisma/client";
 
-// Helper function to serialize a transaction
 const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
-  const serialized = {} as SerializedTransaction;
-
-  for (const key in obj) {
-    if (key === "balance" && obj.balance) {
-      serialized.balance = obj.balance.toNumber();
-    } else if (key === "amount" && obj.amount) {
-      serialized.amount = obj.amount.toNumber();
-    } else {
-      (serialized as any)[key] = (obj as any)[key];
-    }
-  }
-
-  return serialized;
+  return {
+    id: obj.id,
+    type: obj.type,
+    amount: obj.amount?.toNumber() ?? 0,
+    date: obj.date,
+    category: obj.category,
+    description: obj.description,
+    status: obj.status,
+    accountId: obj.account, // assuming this maps to accountId
+    tags: obj.tags ?? [],
+    balance: obj.balance?.toNumber() ?? 0,
+    isRecurring: obj.isRecurring ?? false,
+    userId: obj.userId,
+    currency: obj.currency ?? "USD", // fallback if needed
+    createdAt: obj.createdAt,
+    updatedAt: obj.updatedAt,
+  };
 };
 
-// Similar to above, just simplified
 const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   const serialized = obj as unknown as SerializedTransaction;
+
   if (obj.balance) {
     serialized.balance = obj.balance.toNumber();
   }
@@ -40,7 +43,6 @@ const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   return serialized;
 };
 
-// Serialize an account with transaction count
 const serializeAccount = (
   account: Account & { _count: { transactions: number } }
 ): SerializedAccount => {
@@ -59,7 +61,6 @@ const serializeAccount = (
   };
 };
 
-// Get account with all transactions for the logged-in user
 export async function getAccountWithTransactions(
   accountId: string
 ): Promise<AccountData> {
@@ -95,13 +96,7 @@ export async function getAccountWithTransactions(
   };
 }
 
-// Set the default account for the user
-export async function updateDefaultAccount(
-  accountId: string
-): Promise<
-  | { success: true; data: SerializedTransaction }
-  | { success: false; error: string }
-> {
+export async function updateDefaultAccount(accountId: string) {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -110,9 +105,11 @@ export async function updateDefaultAccount(
       where: { clerkUserId: userId },
     });
 
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-    // Unset current default account
+    // First, unset any existing default account
     await db.account.updateMany({
       where: {
         userId: user.id,
@@ -121,7 +118,7 @@ export async function updateDefaultAccount(
       data: { isDefault: false },
     });
 
-    // Set new default account
+    // Then set the new default account
     const account = await db.account.update({
       where: {
         id: accountId,
@@ -132,16 +129,17 @@ export async function updateDefaultAccount(
 
     revalidatePath("/dashboard");
     return { success: true, data: serializeTransaction(account) };
-  } catch (error: unknown) {
-    const err = error instanceof Error ? error.message : "Unknown error";
-    return { success: false, error: err };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: "An unknown error occurred" };
   }
 }
 
-// Delete multiple transactions and update balances
 export async function bulkDeleteTransactions(
   transactionIds: string[]
-): Promise<{ success: boolean; error?: string }> {
+): Promise<BulkDeleteResult> {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -152,6 +150,7 @@ export async function bulkDeleteTransactions(
 
     if (!user) throw new Error("User not found");
 
+    // Get transactions to calculate balance changes
     const transactions = await db.transaction.findMany({
       where: {
         id: { in: transactionIds },
@@ -159,20 +158,26 @@ export async function bulkDeleteTransactions(
       },
     });
 
+    // Group transactions by account to update balances
     const accountBalanceChanges: Record<string, number> = transactions.reduce(
-      (acc: Record<string, number>, transaction: Transaction) => {
-        const change =
-          transaction.type === "EXPENSE"
+      (acc, transaction) => {
+        const rawAmount =
+          transaction.amount instanceof Object &&
+          "toNumber" in transaction.amount
             ? transaction.amount.toNumber()
-            : -transaction.amount.toNumber();
+            : Number(transaction.amount);
+
+        const change = transaction.type === "EXPENSE" ? rawAmount : -rawAmount;
 
         acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change;
         return acc;
       },
-      {}
+      {} as Record<string, number>
     );
 
+    // Delete transactions and update account balances in a transaction
     await db.$transaction(async (tx) => {
+      // Delete transactions
       await tx.transaction.deleteMany({
         where: {
           id: { in: transactionIds },
@@ -180,6 +185,7 @@ export async function bulkDeleteTransactions(
         },
       });
 
+      // Update account balances
       for (const [accountId, balanceChange] of Object.entries(
         accountBalanceChanges
       )) {
@@ -198,8 +204,7 @@ export async function bulkDeleteTransactions(
     revalidatePath("/account/[id]");
 
     return { success: true };
-  } catch (error: unknown) {
-    const err = error instanceof Error ? error.message : "Unknown error";
-    return { success: false, error: err };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }

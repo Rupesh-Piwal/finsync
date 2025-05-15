@@ -38,6 +38,8 @@ export interface SerializedTransaction {
   status: string;
   userId: string;
   accountId: string;
+  currency: string;
+  tags: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -55,4 +57,9 @@ export interface AccountData extends SerializedAccount {
 
 export interface TransactionTableProps {
   transactions: SerializedTransaction[];
+}
+
+export interface BulkDeleteResult {
+  success: boolean;
+  error?: string;
 }

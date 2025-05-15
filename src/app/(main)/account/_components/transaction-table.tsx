@@ -50,9 +50,10 @@ import {
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ReactEventHandler, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
+import { categoryColors } from "../../../../../data/categories";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -181,7 +182,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
     setSelectedIds([]); // Clear selections on page change
   };
 
-   const handleSort = (field) => {
+  const handleSort = (field: string) => {
     setSortConfig((current) => ({
       field,
       direction:
@@ -202,6 +203,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
       {deleteLoading && (
         <BarLoader className="mt-4" width={"100%"} color="#9333ea" />
       )}
+
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
@@ -275,6 +277,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
           )}
         </div>
       </div>
+
       {/* Transactions Table */}
       <div className="border border-gray-800 rounded overflow-hidden">
         <Table>
@@ -282,61 +285,89 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
             <TableRow className="border-b border-gray-700 hover:bg-gray-800">
               <TableHead className="w-12 text-teal-400">
                 <Checkbox
-                  // onCheckedChange={handleSelectAll}
+                  onCheckedChange={handleSelectAll}
                   className="border-teal-500 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
                 />
               </TableHead>
-              <TableHead
-  onClick={() => handleSort("date")}
-  className="cursor-pointer text-teal-400 font-semibold"
->
-  <div className="flex items-center space-x-1">
-    Date
-    {sortConfig.field === "date" &&
-      (sortConfig.direction === "asc" ? (
-        <ChevronUp className="ml-1 h-4 w-4" />
-      ) : (
-        <ChevronDown className="ml-1 h-4 w-4" />
-      ))}
-  </div>
-</TableHead>
 
-<TableHead
-  onClick={() => handleSort("category")}
-  className="cursor-pointer text-teal-400 font-semibold"
->
-  <div className="flex items-center space-x-1">
-    <span>Category</span>
-    {sortConfig.field === "category" &&
-      (sortConfig.direction === "asc" ? (
-        <ChevronUp className="ml-1 h-4 w-4" />
-      ) : (
-        <ChevronDown className="ml-1 h-4 w-4" />
-      ))}
-  </div>
-</TableHead>
+              <TableHead
+                onClick={() => handleSort("date")}
+                className="cursor-pointer text-teal-400 font-semibold"
+              >
+                <div className="flex items-center space-x-1">
+                  Date
+                  {sortConfig.field === "date" &&
+                    (sortConfig.direction === "asc" ? (
+                      <ChevronUp className="ml-1 h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    ))}
+                </div>
+              </TableHead>
+
+              <TableHead
+                onClick={() => handleSort("category")}
+                className="cursor-pointer text-teal-400 font-semibold"
+              >
+                <div className="flex items-center space-x-1">
+                  <span>Category</span>
+                  {sortConfig.field === "category" &&
+                    (sortConfig.direction === "asc" ? (
+                      <ChevronUp className="ml-1 h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    ))}
+                </div>
+              </TableHead>
 
               <TableHead className="text-teal-400 font-semibold">
                 Description
               </TableHead>
-              <TableHead className="cursor-pointer text-teal-400 font-semibold">
+
+              <TableHead
+                onClick={() => handleSort("category")}
+                className="cursor-pointer text-teal-400 font-semibold"
+              >
                 <div className="flex items-center space-x-1">
-                  <span>Category</span>
+                  <span>
+                    Category{" "}
+                    {sortConfig.field === "category" &&
+                      (sortConfig.direction === "asc" ? (
+                        <ChevronUp className="ml-1 h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      ))}{" "}
+                  </span>
                 </div>
               </TableHead>
-              <TableHead className="cursor-pointer text-right text-teal-400 font-semibold">
+
+              <TableHead
+                onClick={() => handleSort("amount")}
+                className="cursor-pointer text-right text-teal-400 font-semibold"
+              >
                 <div className="flex items-center justify-end space-x-1">
-                  <span>Amount</span>
+                  <span>
+                    Amount{" "}
+                    {sortConfig.field === "amount" &&
+                      (sortConfig.direction === "asc" ? (
+                        <ChevronUp className="ml-1 h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="ml-1 h-4 w-4" />
+                      ))}
+                  </span>
                 </div>
               </TableHead>
+
               <TableHead className="text-teal-400 font-semibold">
                 Recurring
               </TableHead>
+
               <TableHead className="w-12 text-teal-400" />
             </TableRow>
           </TableHeader>
+
           <TableBody>
-             {paginatedTransactions.length === 0 ? (
+            {paginatedTransactions.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -345,121 +376,142 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                   No transactions found
                 </TableCell>
               </TableRow>
-            ) :
-            (paginatedTransactions.map((transaction) => (
-              <TableRow
-                key={transaction.id}
-                className="border-b border-gray-800 hover:bg-gray-800/30 hover:shadow-lg hover:shadow-black/10 transition-all duration-200"
-              >
-                <TableCell>
-                  <Checkbox
-                    checked={selectedIds.includes(Number(transaction.id))}
-                    onCheckedChange={() => handleSelect(Number(transaction.id))}
-                    className="border-gray-600 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
-                  />
-                </TableCell>
-                <TableCell className="text-gray-300 text-sm">
-                  {format(new Date(transaction.date), "PP")}
-                </TableCell>
-                <TableCell className="font-medium text-gray-200 text-sm">
-                  {transaction.description}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant="outline"
-                    className="rounded-full bg-gray-900/60 text-gray-300 border-gray-700 px-3 py-1 text-xs font-medium tracking-wide"
-                  >
-                    {transaction.category}
-                  </Badge>
-                </TableCell>
-                <TableCell
-                  className={cn(
-                    "text-right font-medium text-sm",
-                    transaction.type === "EXPENSE"
-                      ? "text-red-400"
-                      : "text-green-400"
-                  )}
+            ) : (
+              paginatedTransactions.map((transaction) => (
+                <TableRow
+                  key={transaction.id}
+                  className="border-b border-gray-800 hover:bg-gray-800/30 hover:shadow-lg hover:shadow-black/10 transition-all duration-200"
                 >
-                  {transaction.type === "EXPENSE" ? "-" : "+"}$
-                  {transaction.amount.toFixed(2)}
-                </TableCell>
-              <TableCell>
-  {transaction.isRecurring ? (
-    <Badge className="rounded-full text-xs" variant="secondary">
-      {RECURRING_INTERVALS[transaction.recurringInterval || ""]}
-    </Badge>
-  ) : (
-    <Badge className="rounded-full text-xs" variant="outline">
-      One-time
-    </Badge>
-  )}
-</TableCell>
-<TableCell className="text-right">
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="ghost" className="h-8 w-8 p-0">
-        <span className="sr-only">Open menu</span>
-        <MoreHorizontal className="h-4 w-4" />
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="w-40">
-      <DropdownMenuItem
-        onClick={() =>
-          router.push(`/dashboard/transactions/edit/${transaction.id}`)
-        }
-      >
-        Edit
-      </DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem
-        className="text-red-600"
-        onClick={() => {
-          setSelectedIds([transaction.id]);
-          handleBulkDelete();
-        }}
-      >
-        Delete
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-</TableCell>
-
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="h-8 w-8 p-0 text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-full"
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                      align="end"
-                      className="bg-[#1a1a1a] border border-gray-700 text-gray-200 shadow-lg shadow-black/40 rounded-lg"
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedIds.includes(Number(transaction.id))}
+                      onCheckedChange={() =>
+                        handleSelect(Number(transaction.id))
+                      }
+                      className="border-gray-600 focus:ring-2 focus:ring-teal-600 data-[state=checked]:bg-teal-500 data-[state=checked]:border-teal-500"
+                    />
+                  </TableCell>
+                  <TableCell className="text-gray-300 text-sm">
+                    {format(new Date(transaction.date), "PP")}
+                  </TableCell>
+                  <TableCell className="font-medium text-gray-200 text-sm">
+                    {transaction.description}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="outline"
+                      style={{
+                        background: categoryColors[transaction.category],
+                      }}
+                      className="rounded-full bg-gray-900/60 text-gray-300 border-gray-700 px-3 py-1 text-xs font-medium tracking-wide"
                     >
-                      <DropdownMenuItem
-                        onClick={() =>
-                          router.push(
-                            `/transaction/create?edit=${transaction.id}`
-                          )
-                        }
-                        className="hover:bg-gray-800 cursor-pointer"
+                      {transaction.category}
+                    </Badge>
+                  </TableCell>
+                  <TableCell
+                    className={cn(
+                      "text-right font-medium text-sm",
+                      transaction.type === "EXPENSE"
+                        ? "text-red-400"
+                        : "text-green-400"
+                    )}
+                  >
+                    {transaction.type === "EXPENSE" ? "-" : "+"}$
+                    {transaction.amount.toFixed(2)}
+                  </TableCell>
+                  <TableCell>
+                    {transaction.isRecurring ? (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Badge
+                              className="rounded-full text-xs"
+                              variant="secondary"
+                            >
+                              {
+                                RECURRING_INTERVALS[
+                                  transaction.recurringInterval || ""
+                                ]
+                              }
+                            </Badge>
+                          </TooltipTrigger>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <Badge className="rounded-full text-xs" variant="outline">
+                        One-time
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem
+                          onClick={() =>
+                            router.push(
+                              `/dashboard/transactions/edit/${transaction.id}`
+                            )
+                          }
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => {
+                            setSelectedIds([Number(transaction.id)]);
+                            handleBulkDelete();
+                          }}
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="h-8 w-8 p-0 text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-full"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        align="end"
+                        className="bg-[#1a1a1a] border border-gray-700 text-gray-200 shadow-lg shadow-black/40 rounded-lg"
                       >
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className="bg-gray-700" />
-                      <DropdownMenuItem
-                        onClick={() => deleteFn([transaction.id])}
-                        className="text-red-400 hover:bg-gray-800 hover:text-red-300 cursor-pointer"
-                      >
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
+                        <DropdownMenuItem
+                          onClick={() =>
+                            router.push(
+                              `/transaction/create?edit=${transaction.id}`
+                            )
+                          }
+                          className="hover:bg-gray-800 cursor-pointer"
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-gray-700" />
+                        <DropdownMenuItem
+                          onClick={() => deleteFn([transaction.id])}
+                          className="text-red-400 hover:bg-gray-800 hover:text-red-300 cursor-pointer"
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

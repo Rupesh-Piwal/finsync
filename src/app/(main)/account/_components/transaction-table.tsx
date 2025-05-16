@@ -270,6 +270,38 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
               </SelectItem>
             </SelectContent>
           </Select>
+
+          {/* Bulk Actions */}
+
+          {selectedIds.length > 0 && (
+            <div className="flex items-center gap-2 transition-all animate-in fade-in duration-300">
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleBulkDelete}
+                className="bg-gradient-to-r from-rose-500/70 to-red-500/70 hover:from-rose-500 hover:to-red-500 border-0 text-white shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2 rounded-sm "
+              >
+                <div className="bg-white/20 p-1 rounded">
+                  <Trash className="h-3.5 w-3.5" />
+                </div>
+                <span>Delete Selected ({selectedIds.length})</span>
+              </Button>
+            </div>
+          )}
+
+          {(searchTerm || typeFilter || recurringFilter) && (
+            <div className="transition-all animate-in fade-in slide-in-from-right duration-300">
+              <Button
+                variant="outline"
+                onClick={handleClearFilters}
+                title="Clear filters"
+                className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700 hover:bg-gray-800 hover:border-teal-700 text-gray-200 hover:text-teal-400 rounded-lg shadow-sm hover:shadow flex items-center gap-2 px-3 py-2 h-9 text-sm transition-all duration-300"
+              >
+                <X className="h-3.5 w-3.5" />
+                <span className="mr-1">Clear Filters</span>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -299,7 +331,9 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                     ))}
                 </div>
               </TableHead>
-
+              <TableHead className="text-teal-400 font-semibold">
+                Description
+              </TableHead>
               <TableHead
                 onClick={() => handleSort("category")}
                 className="cursor-pointer text-teal-400 font-semibold"
@@ -312,27 +346,6 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                     ) : (
                       <ChevronDown className="ml-1 h-4 w-4" />
                     ))}
-                </div>
-              </TableHead>
-
-              <TableHead className="text-teal-400 font-semibold">
-                Description
-              </TableHead>
-
-              <TableHead
-                onClick={() => handleSort("category")}
-                className="cursor-pointer text-teal-400 font-semibold"
-              >
-                <div className="flex items-center space-x-1">
-                  <span>
-                    Category{" "}
-                    {sortConfig.field === "category" &&
-                      (sortConfig.direction === "asc" ? (
-                        <ChevronUp className="ml-1 h-4 w-4" />
-                      ) : (
-                        <ChevronDown className="ml-1 h-4 w-4" />
-                      ))}{" "}
-                  </span>
                 </div>
               </TableHead>
 
@@ -424,10 +437,10 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                         <Tooltip>
                           <TooltipTrigger>
                             <Badge
-                              className="rounded-full text-xs"
+                              className="rounded-full text-xs flex items-center gap-1.5 bg-teal-900/30 text-teal-400 border border-teal-700 hover:bg-teal-800/40"
                               variant="secondary"
                             >
-                              <RefreshCw className="h-3 w-3" />
+                              <RefreshCw className="h-3 w-3 text-teal-400" />
                               {
                                 RECURRING_INTERVALS[
                                   transaction.recurringInterval || ""
@@ -435,45 +448,32 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                               }
                             </Badge>
                           </TooltipTrigger>
+                          <TooltipContent className="bg-gray-900/95 border-gray-800 text-gray-100">
+                            <div className="text-sm">
+                              <div className="font-medium text-teal-400">
+                                Next Date:
+                              </div>
+                              <div>
+                                {transaction.nextRecurringDate
+                                  ? format(
+                                      new Date(transaction.nextRecurringDate),
+                                      "PPP"
+                                    )
+                                  : ""}
+                              </div>
+                            </div>
+                          </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
                     ) : (
-                      <Badge className="rounded-full text-xs" variant="outline">
-                        <Clock className="h-3 w-3" />
+                      <Badge
+                        className="rounded-full text-xs flex items-center gap-1.5 bg-gray-800/40 text-gray-300 border border-gray-700 hover:bg-gray-800/60"
+                        variant="outline"
+                      >
+                        <Clock className="h-3 w-3 text-gray-400" />
                         One-time
                       </Badge>
                     )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-40">
-                        <DropdownMenuItem
-                          onClick={() =>
-                            router.push(
-                              `/dashboard/transactions/edit/${transaction.id}`
-                            )
-                          }
-                        >
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="text-red-600"
-                          onClick={() => {
-                            setSelectedIds([Number(transaction.id)]);
-                            handleBulkDelete();
-                          }}
-                        >
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </TableCell>
 
                   <TableCell>

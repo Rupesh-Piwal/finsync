@@ -396,9 +396,13 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                     <Badge
                       variant="outline"
                       style={{
-                        background: categoryColors[transaction.category],
+                        backgroundColor: `${
+                          categoryColors[transaction.category]
+                        }20`, // 12% opacity
+                        color: categoryColors[transaction.category],
+                        borderColor: categoryColors[transaction.category],
                       }}
-                      className="rounded-full bg-gray-900/60 text-gray-300 border-gray-700 px-3 py-1 text-xs font-medium tracking-wide"
+                      className="rounded-full px-3 py-1 text-xs font-medium tracking-wide"
                     >
                       {transaction.category}
                     </Badge>
@@ -514,18 +518,18 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
       </div>
       {/* PAGINATION  */}
 
-      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 mt-4">
           <Button
             variant="outline"
             size="icon"
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
+            className="bg-gray-900/60 border-gray-800 text-gray-100 hover:bg-gray-800/70 hover:text-teal-400 focus:ring-1 focus:ring-teal-400 focus:border-teal-400 disabled:opacity-50 disabled:hover:bg-gray-900/60 disabled:hover:text-gray-400 h-8 w-8"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-sm">
+          <span className="text-sm bg-gray-900/60 px-3 py-1.5 rounded-md border border-gray-800 text-gray-300">
             Page {currentPage} of {totalPages}
           </span>
           <Button
@@ -533,6 +537,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
             size="icon"
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
+            className="bg-gray-900/60 border-gray-800 text-gray-100 hover:bg-gray-800/70 hover:text-teal-400 focus:ring-1 focus:ring-teal-400 focus:border-teal-400 disabled:opacity-50 disabled:hover:bg-gray-900/60 disabled:hover:text-gray-400 h-8 w-8"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>

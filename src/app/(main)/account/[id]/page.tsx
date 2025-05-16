@@ -9,6 +9,7 @@ import React, { Suspense } from "react";
 import { BarLoader } from "react-spinners";
 import TransactionTable from "../_components/transaction-table";
 import { CreditCard, ArrowUpDown } from "lucide-react";
+import { AccountChart } from "../_components/account-chart";
 
 type AccountData = {
   transactions: SerializedTransaction[];
@@ -66,6 +67,15 @@ const Account = async ({ params }: AccountPageProps) => {
             </div>
           </div>
         </div>
+
+        {/* Chart Section */}
+        <Suspense
+          fallback={
+            <BarLoader className="mt-4" width={"100%"} color="#9333ea" />
+          }
+        >
+          <AccountChart transactions={transactions} />
+        </Suspense>
 
         {/* Transaction Table Section */}
         <div className="bg-[#111111] px-1.5 py-6 md:p-6 rounded-2xl border border-gray-800 shadow-lg">

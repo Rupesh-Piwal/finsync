@@ -27,7 +27,7 @@ const Account = async ({ params }: AccountPageProps) => {
 
   return (
     <div className="min-h-screen bg-black text-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+      <div className="max-w-7xl mx-auto px-1.5 sm:px-6 lg:px-8 py-6 space-y-8">
         {/* Header Section with Account Details */}
         <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] rounded-2xl p-6 shadow-lg border border-gray-800">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
@@ -45,8 +45,11 @@ const Account = async ({ params }: AccountPageProps) => {
                   </span>
                   <span className="mx-2">•</span>
                   <span className="flex items-center">
-                    <ArrowUpDown className="h-3 w-3 mr-1" />
-                    {account._count.transactions} Transaction
+                    <ArrowUpDown className="h-3 w-3 mr-1 text-emerald-400" />
+                    <span className="text-white pr-1">
+                      {account._count.transactions}
+                    </span>
+                    Transaction
                     {account._count.transactions !== 1 && "s"}
                   </span>
                 </p>
@@ -65,7 +68,7 @@ const Account = async ({ params }: AccountPageProps) => {
         </div>
 
         {/* Transaction Table Section */}
-        <div className="bg-[#111111] p-6 rounded-2xl border border-gray-800 shadow-lg">
+        <div className="bg-[#111111] px-1.5 py-6 md:p-6 rounded-2xl border border-gray-800 shadow-lg">
           <h2 className="text-xl font-bold text-teal-400 mb-6 flex items-center pl-3">
             Transaction History
           </h2>

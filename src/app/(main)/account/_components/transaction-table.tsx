@@ -205,9 +205,9 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
       )}
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-4 p-4 mb-3 bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] rounded-xl border border-gray-800 shadow-lg">
         <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-3 h-4 w-4 text-teal-400" />
           <Input
             placeholder="Search transactions..."
             value={searchTerm}
@@ -215,10 +215,10 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            className="pl-8"
+            className="pl-10 bg-gray-900/60 border-gray-800 text-gray-100 focus:border-teal-400 focus:ring-1 focus:ring-teal-400 rounded-md h-10"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <Select
             value={typeFilter}
             onValueChange={(value) => {
@@ -226,12 +226,22 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-[130px]">
+            <SelectTrigger className="w-[140px] bg-gray-900/60 border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-1 focus:ring-teal-400">
               <SelectValue placeholder="All Types" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="INCOME">Income</SelectItem>
-              <SelectItem value="EXPENSE">Expense</SelectItem>
+            <SelectContent className="bg-gray-900/90 border border-gray-800 text-gray-100">
+              <SelectItem
+                value="INCOME"
+                className="hover:bg-gray-800/70 focus:bg-gray-800/70 text-emerald-400 hover:text-gray-400"
+              >
+                Income
+              </SelectItem>
+              <SelectItem
+                value="EXPENSE"
+                className="hover:bg-gray-800/70 focus:bg-gray-800/70 text-teal-400 hover:text-gray-400"
+              >
+                Expense
+              </SelectItem>
             </SelectContent>
           </Select>
 
@@ -242,39 +252,24 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-[130px]">
+            <SelectTrigger className="w-[160px] bg-gray-900/60 border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-1 focus:ring-teal-400">
               <SelectValue placeholder="All Transactions" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="recurring">Recurring Only</SelectItem>
-              <SelectItem value="non-recurring">Non-recurring Only</SelectItem>
+            <SelectContent className="bg-gray-900/90 border border-gray-800 text-gray-100">
+              <SelectItem
+                value="recurring"
+                className="hover:bg-gray-800/70 focus:bg-gray-800/70"
+              >
+                Recurring Only
+              </SelectItem>
+              <SelectItem
+                value="non-recurring"
+                className="hover:bg-gray-800/70 focus:bg-gray-800/70"
+              >
+                Non-recurring Only
+              </SelectItem>
             </SelectContent>
           </Select>
-
-          {/* Bulk Actions */}
-          {selectedIds.length > 0 && (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleBulkDelete}
-              >
-                <Trash className="h-4 w-4 mr-2" />
-                Delete Selected ({selectedIds.length})
-              </Button>
-            </div>
-          )}
-
-          {(searchTerm || typeFilter || recurringFilter) && (
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleClearFilters}
-              title="Clear filters"
-            >
-              <X className="h-4 w-5" />
-            </Button>
-          )}
         </div>
       </div>
 
@@ -428,6 +423,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                               className="rounded-full text-xs"
                               variant="secondary"
                             >
+                              <RefreshCw className="h-3 w-3" />
                               {
                                 RECURRING_INTERVALS[
                                   transaction.recurringInterval || ""
@@ -439,6 +435,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
                       </TooltipProvider>
                     ) : (
                       <Badge className="rounded-full text-xs" variant="outline">
+                        <Clock className="h-3 w-3" />
                         One-time
                       </Badge>
                     )}

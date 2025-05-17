@@ -33,7 +33,7 @@ const page = async () => {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <CreateAccountDrawer>
-          <Card className="hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-700 bg-gradient-to-br from-gray-900 to-black text-white overflow-hidden group">
+          <Card className="hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-800 bg-gradient-to-br from-gray-900 to-black text-white overflow-hidden group">
             <CardContent className="flex flex-col items-center justify-center h-full p-6">
               <div className="p-3 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 mb-4 group-hover:from-emerald-400 group-hover:to-teal-400 transition-colors">
                 <Plus className="h-6 w-6 text-gray-900" />

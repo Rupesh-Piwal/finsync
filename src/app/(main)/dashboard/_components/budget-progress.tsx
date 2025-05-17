@@ -79,7 +79,7 @@ export function BudgetProgress({
   }, [error]);
 
   return (
-    <Card className="bg-gradient-to-br from-gray-900/20 to-gray-800/40 backdrop-blur-md border border-gray-800 shadow-lg transition-all duration-300 hover:shadow-teal-900/20 hover:border-teal-900/30 mb-4">
+    <Card className="bg-gradient-to-br from-gray-900 to-black backdrop-blur-md border border-gray-800 shadow-lg transition-all duration-300 hover:shadow-teal-900/20 hover:border-teal-900/30 mb-4">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex-1">
           <CardTitle className="text-sm font-medium text-gray-200">

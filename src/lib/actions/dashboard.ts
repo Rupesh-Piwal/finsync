@@ -10,19 +10,40 @@ import {
 } from "@/types";
 
 const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
-  const serialized: SerializedTransaction = {};
+  // Create an object to hold serialized fields, starting empty but typed Partial to allow stepwise filling
+  const serialized: Partial<SerializedTransaction> = {};
 
   for (const key in obj) {
-    if (key === "balance" && obj.balance) {
+    if (
+      key === "balance" &&
+      obj.balance !== undefined &&
+      obj.balance !== null
+    ) {
+      // assuming obj.balance has toNumber method
       serialized.balance = obj.balance.toNumber();
-    } else if (key === "amount" && obj.amount) {
+    } else if (
+      key === "amount" &&
+      obj.amount !== undefined &&
+      obj.amount !== null
+    ) {
       serialized.amount = obj.amount.toNumber();
-    } else {
-      serialized[key] = obj[key];
+    } else if (
+      key === "id" ||
+      key === "type" ||
+      key === "date" ||
+      key === "category" ||
+      key === "description" ||
+      key === "isRecurring"
+    ) {
+      // For known string keys on SerializedTransaction, assign directly (cast as needed)
+      serialized[key] = obj[key] as any;
     }
+    // Ignore any keys not in SerializedTransaction
   }
 
-  return serialized;
+  // Now, cast to SerializedTransaction after you ensured all required fields are there
+  // (You might want to add runtime checks here)
+  return serialized as SerializedTransaction;
 };
 
 const serializeAccount = (obj: any): SerializedAccount => {
@@ -124,3 +145,23 @@ export const createAccount = async (data: CreateAccountData) => {
     console.error("Auth Error", error);
   }
 };
+export async function getDashboardData() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Get all user transactions
+  const transactions = await db.transaction.findMany({
+    where: { userId: user.id },
+    orderBy: { date: "desc" },
+  });
+
+  return transactions.map(serializeTransaction);
+}

@@ -3,14 +3,31 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import React from "react";
 import { AccountCard } from "./_components/accounts-card";
-import { getUserAccounts } from "@/lib/actions/dashboard";
+import { getDashboardData, getUserAccounts } from "@/lib/actions/dashboard";
+import { BudgetProgress } from "./_components/budget-progress";
+import { getCurrentBudget } from "@/lib/actions/budget";
 
-const page = async() => {
-const accounts = await getUserAccounts()
+const page = async () => {
+  const [accounts, transactions] = await Promise.all([
+    getUserAccounts(),
+    getDashboardData(),
+  ]);
+
+  const defaultAccount = accounts?.find((account) => account.isDefault);
+
+  // Get budget for default account
+  let budgetData = null;
+  if (defaultAccount) {
+    budgetData = await getCurrentBudget(defaultAccount.id);
+  }
 
   return (
     <div className="sapce-y-8">
       {/* BUDGET PROCESS  */}
+      <BudgetProgress
+        initialBudget={budgetData?.budget ?? null}
+        currentExpenses={budgetData?.currentExpenses || 0}
+      />
       {/* DASHBOARD PROCESS  */}
       {/* ACCOUNTS GRID  */}
 

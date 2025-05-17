@@ -1,9 +1,11 @@
+"use server";
+
 import { revalidatePath } from "next/cache";
 import { db } from "../prisma";
 import { auth } from "@clerk/nextjs/server";
 import { Decimal } from "@prisma/client/runtime/library";
 
-export async function getCurrentBudget(accountId:string) {
+export async function getCurrentBudget(accountId: string) {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -62,7 +64,7 @@ export async function getCurrentBudget(accountId:string) {
   }
 }
 
-export async function updateBudget(amount:Decimal) {
+export async function updateBudget(amount: Decimal) {
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -92,7 +94,7 @@ export async function updateBudget(amount:Decimal) {
       success: true,
       data: { ...budget, amount: budget.amount.toNumber() },
     };
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("Error updating budget:", error);
     return { success: false, error: error.message };
   }

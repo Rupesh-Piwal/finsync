@@ -1,4 +1,4 @@
-import { Account, AccountType } from "@prisma/client";
+import { Account, AccountType, Budget } from "@prisma/client";
 
 export interface CreateAccountData {
   name: string;
@@ -62,4 +62,9 @@ export interface TransactionTableProps {
 export interface BulkDeleteResult {
   success: boolean;
   error?: string;
+}
+
+interface BudgetProgressProps {
+  initialBudget: Budget | null;
+  currentExpenses: number;
 }

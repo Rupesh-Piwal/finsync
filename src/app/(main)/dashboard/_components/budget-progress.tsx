@@ -79,10 +79,10 @@ export function BudgetProgress({
   }, [error]);
 
   return (
-    <Card>
+    <Card className="bg-gradient-to-br from-gray-900/20 to-gray-800/40 backdrop-blur-md border border-gray-800 shadow-lg transition-all duration-300 hover:shadow-teal-900/20 hover:border-teal-900/30 mb-4">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex-1">
-          <CardTitle className="text-sm font-medium">
+          <CardTitle className="text-sm font-medium text-gray-200">
             Monthly Budget (Default Account)
           </CardTitle>
           <div className="flex items-center gap-2 mt-1">
@@ -92,7 +92,7 @@ export function BudgetProgress({
                   type="number"
                   value={newBudget}
                   onChange={(e) => setNewBudget(e.target.value)}
-                  className="w-32"
+                  className="w-32 bg-gray-800/50 border-gray-700 text-gray-200"
                   placeholder="Enter amount"
                   autoFocus
                   disabled={isLoading}
@@ -102,34 +102,36 @@ export function BudgetProgress({
                   size="icon"
                   onClick={handleUpdateBudget}
                   disabled={isLoading}
+                  className="bg-emerald-500/10 hover:bg-emerald-500/20 transition-all duration-300"
                 >
-                  <Check className="h-4 w-4 text-green-500" />
+                  <Check className="h-4 w-4 text-emerald-400" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleCancel}
                   disabled={isLoading}
+                  className="bg-rose-500/10 hover:bg-rose-500/20 transition-all duration-300"
                 >
-                  <X className="h-4 w-4 text-red-500" />
+                  <X className="h-4 w-4 text-rose-400" />
                 </Button>
               </div>
             ) : (
               <>
-                <CardDescription>
+                <div className="text-gray-400 text-sm">
                   {initialBudget
                     ? `$${currentExpenses.toFixed(
                         2
                       )} of $${initialBudget.amount.toFixed(2)} spent`
                     : "No budget set"}
-                </CardDescription>
+                </div>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsEditing(true)}
-                  className="h-6 w-6"
+                  className="h-6 w-6 bg-teal-800/30 hover:bg-teal-700/50 transition-all duration-300"
                 >
-                  <Pencil className="h-3 w-3" />
+                  <Pencil className="h-3 w-3 text-gray-400" />
                 </Button>
               </>
             )}
@@ -139,20 +141,36 @@ export function BudgetProgress({
       <CardContent>
         {initialBudget && (
           <div className="space-y-2">
-            <Progress
-              value={percentUsed}
-              className={`${
-                percentUsed >= 90
-                  ? "bg-red-500"
-                  : percentUsed >= 75
-                  ? "bg-yellow-500"
-                  : "bg-green-500"
-              }`}
-            />
+            <div className="h-2 w-full bg-gray-800/50 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full ${
+                  percentUsed >= 90
+                    ? "bg-gradient-to-r from-rose-400 to-rose-500"
+                    : percentUsed >= 65
+                    ? "bg-gradient-to-r from-amber-400 to-amber-500"
+                    : "bg-gradient-to-r from-emerald-300 to-emerald-500"
+                }`}
+                style={{ width: `${percentUsed}%` }}
+              />
+            </div>
 
-            <p className="text-xs text-muted-foreground text-right">
-              {percentUsed.toFixed(1)}% used
-            </p>
+            <div className="flex justify-between items-center">
+              <p className="text-xs text-gray-400">Budget remaining</p>
+              <p
+                className={`text-sm font-bold ${
+                  percentUsed >= 90
+                    ? "bg-gradient-to-r from-rose-400 to-rose-500 text-transparent bg-clip-text"
+                    : percentUsed >= 75
+                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-transparent bg-clip-text"
+                    : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
+                }`}
+              >
+                ${(initialBudget.amount - currentExpenses).toFixed(2)}
+                <span className="text-xs ml-1 font-normal text-gray-400">
+                  ({(100 - percentUsed).toFixed(1)}%)
+                </span>
+              </p>
+            </div>
           </div>
         )}
       </CardContent>

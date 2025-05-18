@@ -155,7 +155,19 @@ export function BudgetProgress({
             </div>
 
             <div className="flex justify-between items-center">
-              <p className="text-xs text-gray-400">Budget remaining</p>
+              <p
+                className={`text-xs font-bold ${
+                  percentUsed >= 90
+                    ? "bg-gradient-to-r from-rose-400 to-rose-500 text-transparent bg-clip-text"
+                    : percentUsed >= 75
+                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-transparent bg-clip-text"
+                    : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
+                }`}
+              >
+                <span className="text-gray-400">Budget remaining</span> (
+                {(100 - percentUsed).toFixed(1)}%)
+              </p>
+
               <p
                 className={`text-sm font-bold ${
                   percentUsed >= 90
@@ -166,8 +178,8 @@ export function BudgetProgress({
                 }`}
               >
                 ${(initialBudget.amount - currentExpenses).toFixed(2)}
-                <span className="text-xs ml-1 font-normal text-gray-400">
-                  ({(100 - percentUsed).toFixed(1)}%)
+                <span className="text-xs ml-1 font-normal text-gray-400 ">
+                  ({percentUsed.toFixed(1)}%)
                 </span>
               </p>
             </div>

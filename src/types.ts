@@ -1,4 +1,5 @@
 import { Account, AccountType, Budget } from "@prisma/client";
+import { ReactElement } from "react";
 
 export interface CreateAccountData {
   name: string;
@@ -67,4 +68,16 @@ export interface BulkDeleteResult {
 interface BudgetProgressProps {
   initialBudget: Budget | null;
   currentExpenses: number;
+}
+
+export interface SendEmailProps {
+  to: string | string[];
+  subject: string;
+  react: ReactElement;
+}
+
+export interface SendEmailResponse {
+  success: boolean;
+  data?: any;
+  error?: Error | unknown;
 }

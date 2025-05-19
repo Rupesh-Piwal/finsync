@@ -2,18 +2,7 @@
 
 import { Resend } from "resend";
 import { ReactElement } from "react";
-
-interface SendEmailProps {
-  to: string | string[];
-  subject: string;
-  react: ReactElement;
-}
-
-interface SendEmailResponse {
-  success: boolean;
-  data?: any;
-  error?: Error | unknown;
-}
+import { SendEmailProps, SendEmailResponse } from "@/types";
 
 export async function sendEmail({
   to,

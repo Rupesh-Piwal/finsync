@@ -22,7 +22,6 @@ export default function RootLayout({
         <body
           className={`${inter.className} antialiased bg-[#000000] text-[#ffffff]`}
         >
-          <Header />
           {children}
         </body>
       </html>

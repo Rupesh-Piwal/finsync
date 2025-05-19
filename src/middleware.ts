@@ -7,7 +7,7 @@ const isProtectedRoute = createRouteMatcher([
   "/transaction(.*)",
 ]);
 
-const clerk = clerkMiddleware(async (auth, req) => {
+export const clerk = clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
 
   if (!userId && isProtectedRoute(req)) {

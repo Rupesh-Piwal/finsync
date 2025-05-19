@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { GridBackground } from "../grid-background";
 import { Spotlight } from "../ui/spotlight";
+import Header from "../header";
 
 export const MarketingLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -9,7 +10,12 @@ export const MarketingLayout = ({ children }: { children: ReactNode }) => {
         className="-top-0 left-18 md:-top-5 md:left-10"
         fill="#B7B9BE"
       />
-      <GridBackground>{children}</GridBackground>
+      <GridBackground>
+        <>
+          <Header />
+          {children}
+        </>
+      </GridBackground>
     </div>
   );
 };

@@ -94,7 +94,6 @@ const ReceiptVisualization = () => {
 
   return (
     <div className="hidden md:block w-1/2 z-10 pl-10">
-      {/* Phone frame with 3D effect */}
       <div className="relative h-[500px] w-full max-w-md mx-auto perspective-1000">
         <motion.div
           initial={{ rotateY: 5, rotateX: 5 }}
@@ -104,14 +103,11 @@ const ReceiptVisualization = () => {
           className="absolute inset-0"
         >
           <Card className="relative h-full w-full bg-gradient-to-br from-gray-900 to-gray-950 border-gray-800 shadow-2xl overflow-hidden rounded-3xl transform-gpu">
-            {/* Phone notch */}
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-36 h-6 bg-gray-950 rounded-b-xl z-50"></div>
 
             <CardContent className="p-0 h-full relative">
-              {/* App UI */}
               <div className="absolute inset-0 p-4">
                 <div className="h-full flex flex-col">
-                  {/* App header */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <Avatar className="h-8 w-8 bg-gradient-to-br from-emerald-500 to-teal-600">
@@ -136,7 +132,6 @@ const ReceiptVisualization = () => {
                     </div>
                   </div>
 
-                  {/* Tab navigation */}
                   <Tabs defaultValue="scan" className="mb-2">
                     <TabsList className="grid grid-cols-3 bg-gray-900/50 backdrop-blur-sm">
                       <TabsTrigger
@@ -148,10 +143,8 @@ const ReceiptVisualization = () => {
                     </TabsList>
 
                     <TabsContent value="scan" className="mt-2">
-                      {/* Scanner view */}
                       <Card className="relative h-64 bg-gray-950 border-gray-800 overflow-hidden">
                         <CardContent className="p-0 h-full flex items-center justify-center">
-                          {/* Scanner focus frame */}
                           <div className="relative z-10 w-3/4 h-3/4 border-2 border-emerald-400/30 rounded-md flex items-center justify-center">
                             <motion.div
                               initial={{ opacity: 0, scale: 0.8 }}
@@ -159,21 +152,18 @@ const ReceiptVisualization = () => {
                               transition={{ delay: 0.5 }}
                               className="absolute inset-0 flex items-center justify-center"
                             >
-                              {/* Corner indicators */}
                               <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-emerald-400"></div>
                               <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-emerald-400"></div>
                               <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-emerald-400"></div>
                               <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-emerald-400"></div>
                             </motion.div>
 
-                            {/* Receipt */}
                             <motion.div
                               initial={{ y: 50, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               transition={{ delay: 0.8, type: "spring" }}
                               className="w-[85%] h-[85%] bg-white rounded-md shadow-lg transform rotate-2 relative z-20"
                             >
-                              {/* Receipt contents */}
                               <div className="h-full w-full p-2 flex flex-col">
                                 <div className="border-b border-gray-300 pb-1">
                                   <div className="text-gray-900 text-xs font-medium text-center">
@@ -217,7 +207,6 @@ const ReceiptVisualization = () => {
                             </motion.div>
                           </div>
 
-                          {/* Scanning effects */}
                           <motion.div
                             initial={{ top: "-10%" }}
                             animate={{
@@ -232,14 +221,12 @@ const ReceiptVisualization = () => {
                             className="absolute inset-x-0 h-12 bg-gradient-to-b from-emerald-400/20 via-emerald-400/30 to-transparent rounded-full blur-md"
                           ></motion.div>
 
-                          {/* Camera effects */}
                           <div className="absolute inset-0">
                             <div className="absolute top-4 right-4 w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
                           </div>
                         </CardContent>
                       </Card>
 
-                      {/* Status panel */}
                       <Card className="mt-4 bg-gray-900/70 border-gray-800/50">
                         <CardContent className="p-3 space-y-3">
                           <div className="flex items-center justify-between">
@@ -317,7 +304,6 @@ const ReceiptVisualization = () => {
                     </TabsContent>
                   </Tabs>
 
-                  {/* Recent scans preview */}
                   {status === "complete" && (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -371,17 +357,14 @@ const ReceiptVisualization = () => {
               </div>
             </CardContent>
 
-            {/* 3D lighting effects */}
             <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-gray-800/10 to-transparent pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
           </Card>
         </motion.div>
 
-        {/* Decorative background elements */}
         <div className="absolute -bottom-12 -right-12 w-36 h-36 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 opacity-20 blur-2xl"></div>
         <div className="absolute -top-8 -left-8 w-36 h-36 rounded-full bg-gradient-to-br from-teal-600 to-emerald-500 opacity-10 blur-3xl"></div>
 
-        {/* Phone reflection */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-4 bg-black/30 blur-md rounded-full"></div>
       </div>
     </div>

@@ -65,7 +65,7 @@ export interface BulkDeleteResult {
   error?: string;
 }
 
-interface BudgetProgressProps {
+export interface BudgetProgressProps {
   initialBudget: Budget | null;
   currentExpenses: number;
 }

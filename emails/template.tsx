@@ -30,6 +30,26 @@ type BudgetAlertData = {
 
 type EmailType = "monthly-report" | "budget-alert";
 
+// Default data values
+const defaultMonthlyReportData: MonthlyReportData = {
+  month: new Date().toLocaleString("default", {
+    month: "long",
+    year: "numeric",
+  }),
+  stats: {
+    totalIncome: 0,
+    totalExpenses: 0,
+    byCategory: {},
+  },
+  insights: [],
+};
+
+const defaultBudgetAlertData: BudgetAlertData = {
+  percentageUsed: 0,
+  budgetAmount: 0,
+  totalExpenses: 0,
+};
+
 interface EmailTemplateProps {
   userName?: string;
   type?: EmailType;
@@ -102,10 +122,28 @@ const styles: Record<string, CSSProperties> = {
   },
 };
 
+// Type guards
+function isMonthlyReportData(data: any): data is MonthlyReportData {
+  return (
+    typeof data?.month === "string" &&
+    typeof data?.stats?.totalIncome === "number"
+  );
+}
+
+function isBudgetAlertData(data: any): data is BudgetAlertData {
+  return (
+    typeof data?.percentageUsed === "number" &&
+    typeof data?.budgetAmount === "number" &&
+    typeof data?.totalExpenses === "number"
+  );
+}
+
 export default function EmailTemplate({
   userName = "",
   type = "monthly-report",
-  data = {},
+  data = type === "monthly-report"
+    ? defaultMonthlyReportData
+    : defaultBudgetAlertData,
 }: EmailTemplateProps) {
   if (type === "monthly-report" && isMonthlyReportData(data)) {
     return (
@@ -124,35 +162,44 @@ export default function EmailTemplate({
             <Section style={styles.statsContainer}>
               <div style={styles.stat}>
                 <Text style={styles.text}>Total Income</Text>
-                <Text style={styles.heading}>${data.stats.totalIncome}</Text>
+                <Text style={styles.heading}>
+                  ${data.stats.totalIncome.toLocaleString()}
+                </Text>
               </div>
               <div style={styles.stat}>
                 <Text style={styles.text}>Total Expenses</Text>
-                <Text style={styles.heading}>${data.stats.totalExpenses}</Text>
+                <Text style={styles.heading}>
+                  ${data.stats.totalExpenses.toLocaleString()}
+                </Text>
               </div>
               <div style={styles.stat}>
                 <Text style={styles.text}>Net</Text>
                 <Text style={styles.heading}>
-                  ${data.stats.totalIncome - data.stats.totalExpenses}
+                  $
+                  {(
+                    data.stats.totalIncome - data.stats.totalExpenses
+                  ).toLocaleString()}
                 </Text>
               </div>
             </Section>
 
-            {data.stats.byCategory && (
+            {Object.keys(data.stats.byCategory).length > 0 && (
               <Section style={styles.section}>
                 <Heading style={styles.heading}>Expenses by Category</Heading>
                 {Object.entries(data.stats.byCategory).map(
                   ([category, amount]) => (
                     <div key={category} style={styles.row}>
                       <Text style={styles.text}>{category}</Text>
-                      <Text style={styles.text}>${amount}</Text>
+                      <Text style={styles.text}>
+                        ${amount.toLocaleString()}
+                      </Text>
                     </div>
                   )
                 )}
               </Section>
             )}
 
-            {data.insights && (
+            {data.insights.length > 0 && (
               <Section style={styles.section}>
                 <Heading style={styles.heading}>Welth Insights</Heading>
                 {data.insights.map((insight, index) => (
@@ -189,16 +236,20 @@ export default function EmailTemplate({
             <Section style={styles.statsContainer}>
               <div style={styles.stat}>
                 <Text style={styles.text}>Budget Amount</Text>
-                <Text style={styles.heading}>${data.budgetAmount}</Text>
+                <Text style={styles.heading}>
+                  ${data.budgetAmount.toLocaleString()}
+                </Text>
               </div>
               <div style={styles.stat}>
                 <Text style={styles.text}>Spent So Far</Text>
-                <Text style={styles.heading}>${data.totalExpenses}</Text>
+                <Text style={styles.heading}>
+                  ${data.totalExpenses.toLocaleString()}
+                </Text>
               </div>
               <div style={styles.stat}>
                 <Text style={styles.text}>Remaining</Text>
                 <Text style={styles.heading}>
-                  ${data.budgetAmount - data.totalExpenses}
+                  ${(data.budgetAmount - data.totalExpenses).toLocaleString()}
                 </Text>
               </div>
             </Section>
@@ -209,19 +260,4 @@ export default function EmailTemplate({
   }
 
   return null;
-}
-
-// Type guards
-function isMonthlyReportData(data: any): data is MonthlyReportData {
-  return (
-    typeof data?.month === "string" &&
-    typeof data?.stats?.totalIncome === "number"
-  );
-}
-
-function isBudgetAlertData(data: any): data is BudgetAlertData {
-  return (
-    typeof data?.percentageUsed === "number" &&
-    typeof data?.budgetAmount === "number"
-  );
 }

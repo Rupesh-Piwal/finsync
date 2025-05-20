@@ -1,6 +1,8 @@
 import { db } from "@/lib/prisma";
 import { SerializedTransaction } from "@/types";
 import { inngest } from "./client";
+import EmailTemplate from "../../../../emails/template";
+import { sendEmail } from "@/lib/actions/send-email";
 
 // 3. Budget Alerts with Event Batching
 export const checkBudgetAlerts = inngest.createFunction(
@@ -50,32 +52,29 @@ export const checkBudgetAlerts = inngest.createFunction(
         const budgetAmount = budget.amount;
         const percentageUsed = (totalExpenses / parseFloat(budgetAmount)) * 100;
 
-        console.log(percentageUsed);
-        console.log("🚨 Inside step run for budget:", budget.id);
-        console.log("percentUsed =", percentageUsed);
-        console.log("lastAlertSent =", budget.lastAlertSent);
-        console.log(
-          "Should send alert:",
-          percentageUsed >= 70 &&
-            (!budget.lastAlertSent ||
-              isNewMonth(new Date(budget.lastAlertSent), new Date()))
-        );
-
         // Check if we should send an alert
         if (
-          percentageUsed >= 70 && // Default threshold of 80%
+          percentageUsed >= 60 && // Default threshold of 80%
           (!budget.lastAlertSent ||
             isNewMonth(new Date(budget.lastAlertSent), new Date()))
         ) {
           // ----SEND EMAIL---
-          console.log(
-            "Percentage used:",
-            percentageUsed,
-            "Last alert:",
-            budget.lastAlertSent
-          );
+          await sendEmail({
+            to: budget.user.email,
+            subject: `Budget Alert for ${defaultAccount.name}`,
+            react: EmailTemplate({
+              userName: budget.user.name,
+              type: "budget-alert",
+              data: {
+                percentageUsed,
+                budgetAmount: Number(parseFloat(budgetAmount).toFixed(1)),
+                totalExpenses: +totalExpenses.toFixed(1),
+                // accountName: defaultAccount.name,
+              },
+            }),
+          });
 
-          // Update last alert sent
+          // ---UPDATE last alert sent----
           try {
             const updated = await db.budget.update({
               where: { id: budget.id },

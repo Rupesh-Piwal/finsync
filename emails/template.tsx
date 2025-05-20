@@ -14,6 +14,7 @@ import type { CSSProperties } from "react";
 // Define the types
 type MonthlyReportData = {
   month: string;
+  // accountName: string;
   stats: {
     totalIncome: number;
     totalExpenses: number;
@@ -51,7 +52,7 @@ const defaultBudgetAlertData: BudgetAlertData = {
 };
 
 interface EmailTemplateProps {
-  userName?: string;
+  userName?: string | null;
   type?: EmailType;
   data?: MonthlyReportData | BudgetAlertData;
 }
@@ -259,5 +260,5 @@ export default function EmailTemplate({
     );
   }
 
-  return null;
+  return <></>;
 }

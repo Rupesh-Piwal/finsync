@@ -30,4 +30,6 @@ export const transactionSchema = z
     }
   });
 
+export type TransactionFormData = z.infer<typeof transactionSchema>;
+
 export type AccountFormData = z.infer<typeof accountSchema>;

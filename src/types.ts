@@ -1,4 +1,5 @@
 import { Account, AccountType, Budget } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 import { ReactElement } from "react";
 
 export interface CreateAccountData {
@@ -28,7 +29,7 @@ export interface SerializedTransaction {
   id: string;
   type: string;
   amount: number;
-  balance?: number;
+  balance?: number | Decimal;
   description?: string;
   date: string; // serialized DateTime
   category: string;
@@ -80,4 +81,16 @@ export interface SendEmailResponse {
   success: boolean;
   data?: any;
   error?: Error | unknown;
+}
+
+export interface AddTransactionPageProps {
+  searchParams?: {
+    edit?: string;
+  };
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  type: string;
 }

@@ -181,7 +181,7 @@ export function AddTransactionForm({
             <SelectContent>
               {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
-                  {account.name} (${account.balance.toFixed(2)})
+                  {account.name} (${Number(account.balance).toFixed(2)})
                 </SelectItem>
               ))}
               <CreateAccountDrawer>

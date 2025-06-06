@@ -208,7 +208,7 @@ const TransactionTable = ({ transactions }: TransactionTableProps) => {
 
       {/* Filters */}
 
-      <div className="flex flex-col gap-4 p-4 sm:p-6 mb-3 bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] rounded-xl border border-gray-800 shadow-lg">
+      <div className="flex flex-col gap-4 p-4 sm:p-6 mb-3 bg-gradient-to-br from-[#1b1b1b] to-[#1c1c1c] rounded-xl border border-gray-800 shadow-lg">
         {/* Search Bar - Full width on mobile */}
         <div className="relative w-full">
           <Search className="absolute left-3 top-3 h-4 w-4 text-teal-400" />

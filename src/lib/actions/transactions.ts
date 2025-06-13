@@ -8,11 +8,12 @@ import type {
   TransactionType,
   RecurringInterval,
 } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library"; // or runtime if older Prisma
+import { Decimal } from "@prisma/client/runtime/library";
 import { request } from "@arcjet/next";
 import aj from "@/app/lib/arcjet";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { ScannedReceipt } from "@/types";
 
-// Input type for creating or updating a transaction
 interface CreateTransactionInput {
   accountId: string;
   amount: number;
@@ -24,13 +25,17 @@ interface CreateTransactionInput {
   type: TransactionType;
 }
 
-// Helper to serialize BigInt/Decimal fields
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  throw new Error("GEMINI_API_KEY environment variable is not defined");
+}
+const genAI = new GoogleGenerativeAI(apiKey);
+
 const serializeAmount = (obj: Transaction & { amount: Decimal }) => ({
   ...obj,
   amount: obj.amount.toNumber(),
 });
 
-// Create Transaction
 export async function createTransaction(data: CreateTransactionInput): Promise<{
   success: boolean;
   data: ReturnType<typeof serializeAmount>;
@@ -39,13 +44,11 @@ export async function createTransaction(data: CreateTransactionInput): Promise<{
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
- // Get request data for ArcJet
     const req = await request();
 
-    // Check rate limit
     const decision = await aj.protect(req, {
       userId,
-      requested: 1, // Specify how many tokens to consume
+      requested: 1,
     });
 
     if (decision.isDenied()) {
@@ -64,7 +67,6 @@ export async function createTransaction(data: CreateTransactionInput): Promise<{
 
       throw new Error("Request blocked");
     }
-
 
     const user = await db.user.findUnique({
       where: { clerkUserId: userId },
@@ -113,7 +115,6 @@ export async function createTransaction(data: CreateTransactionInput): Promise<{
   }
 }
 
-// Get Transaction by ID
 export async function getTransaction(
   id: string
 ): Promise<ReturnType<typeof serializeAmount>> {
@@ -138,7 +139,6 @@ export async function getTransaction(
   return serializeAmount(transaction);
 }
 
-// Update Transaction
 export async function updateTransaction(
   id: string,
   data: CreateTransactionInput
@@ -205,7 +205,71 @@ export async function updateTransaction(
   }
 }
 
-// Helper: Calculate next recurring date
+export async function scanReceipt(file: File): Promise<ScannedReceipt | {}> {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const arrayBuffer = await file.arrayBuffer();
+    const base64String = Buffer.from(arrayBuffer).toString("base64");
+
+    const prompt = `
+      Analyze this receipt image and extract the following information in JSON format:
+      - Total amount (just the number)
+      - Date (in ISO format)
+      - Description or items purchased (brief summary)
+      - Merchant/store name
+      - Suggested category (one of: housing,transportation,groceries,utilities,entertainment,food,shopping,healthcare,education,personal,travel,insurance,gifts,bills,other-expense )
+      
+      Only respond with valid JSON in this exact format:
+      {
+        "amount": number,
+        "date": "ISO date string",
+        "description": "string",
+        "merchantName": "string",
+        "category": "string"
+      }
+
+      If its not a recipt, return an empty object
+    `;
+
+    const result = await model.generateContent([
+      {
+        inlineData: {
+          data: base64String,
+          mimeType: file.type,
+        },
+      },
+      prompt,
+    ]);
+
+    const response = await result.response;
+    const text = response.text();
+    const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+
+    try {
+      const data = JSON.parse(cleanedText);
+
+      if (!data || typeof data !== "object" || Object.keys(data).length === 0) {
+        return {}; 
+      }
+
+      return {
+        amount: parseFloat(data.amount),
+        date: new Date(data.date),
+        description: data.description,
+        category: data.category,
+        merchantName: data.merchantName,
+      };
+    } catch (parseError) {
+      console.error("Error parsing JSON response:", parseError);
+      throw new Error("Invalid response format from Gemini");
+    }
+  } catch (error) {
+    console.error("Error scanning receipt:", error);
+    throw new Error("Failed to scan receipt");
+  }
+}
+
 function calculateNextRecurringDate(
   startDate: Date | string,
   interval: RecurringInterval

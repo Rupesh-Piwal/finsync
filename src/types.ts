@@ -108,3 +108,21 @@ export interface ScannedData {
   description?: string;
   category?: string;
 }
+
+export interface TransactionDue {
+  lastProcessed?: Date | null;
+  nextRecurringDate: Date | string | null;
+}
+
+export interface Stats {
+  totalIncome: number | Decimal;
+  totalExpenses: number | Decimal;
+  byCategory: Record<string, number | Decimal>;
+}
+
+export interface MonthlyStats {
+  totalExpenses: number;
+  totalIncome: number;
+  byCategory: Record<string, number>;
+  transactionCount: number;
+}

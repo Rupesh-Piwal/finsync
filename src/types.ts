@@ -102,3 +102,9 @@ export interface ScannedReceipt {
   merchantName: string;
   category: string;
 }
+export interface ScannedData {
+  amount: number;
+  date: string;
+  description?: string;
+  category?: string;
+}

@@ -6,6 +6,7 @@ import { AccountCard } from "./_components/accounts-card";
 import { getDashboardData, getUserAccounts } from "@/lib/actions/dashboard";
 import { BudgetProgress } from "./_components/budget-progress";
 import { getCurrentBudget } from "@/lib/actions/budget";
+import { DashboardOverview } from "./_components/transaction-overview";
 
 const page = async () => {
   const [accounts, transactions] = await Promise.all([
@@ -28,7 +29,13 @@ const page = async () => {
         initialBudget={budgetData?.budget ?? null}
         currentExpenses={budgetData?.currentExpenses || 0}
       />
-      {/* DASHBOARD PROCESS  */}
+
+      {/* Dashboard Overview */}
+      <DashboardOverview
+        accounts={accounts}
+        transactions={transactions || []}
+      />
+
       {/* ACCOUNTS GRID  */}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

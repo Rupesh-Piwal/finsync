@@ -35,14 +35,13 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
       key === "description" ||
       key === "isRecurring"
     ) {
-      // For known string keys on SerializedTransaction, assign directly (cast as needed)
+      
       serialized[key] = obj[key] as any;
     }
-    // Ignore any keys not in SerializedTransaction
+   
   }
 
-  // Now, cast to SerializedTransaction after you ensured all required fields are there
-  // (You might want to add runtime checks here)
+ 
   return serialized as SerializedTransaction;
 };
 

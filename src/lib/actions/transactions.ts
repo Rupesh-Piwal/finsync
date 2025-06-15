@@ -205,6 +205,41 @@ export async function updateTransaction(
   }
 }
 
+// Get User Transactions
+export async function getUserTransactions(query = {}) {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const transactions = await db.transaction.findMany({
+      where: {
+        userId: user.id,
+        ...query,
+      },
+      include: {
+        account: true,
+      },
+      orderBy: {
+        date: "desc",
+      },
+    });
+
+    return { success: true, data: transactions };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    return { success: false, error: errorMessage };
+  }
+}
+
 export async function scanReceipt(file: File): Promise<ScannedReceipt | {}> {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -250,7 +285,7 @@ export async function scanReceipt(file: File): Promise<ScannedReceipt | {}> {
       const data = JSON.parse(cleanedText);
 
       if (!data || typeof data !== "object" || Object.keys(data).length === 0) {
-        return {}; 
+        return {};
       }
 
       return {

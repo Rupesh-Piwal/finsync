@@ -157,9 +157,8 @@ export function AddTransactionForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-4xl mx-auto space-y-8 p-8 bg-[#111111] rounded-2xl shadow-2xl border border-gray-800"
+      className="max-w-4xl mx-auto space-y-8 px-4 py-8 md:p-8 bg-[#111111] rounded-2xl shadow-2xl border border-gray-800"
     >
-      
       <div className="text-center pb-6 border-b border-gray-800">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
           {editMode ? "Update Transaction" : "Create Transaction"}
@@ -169,10 +168,8 @@ export function AddTransactionForm({
         </p>
       </div>
 
-      
       {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />}
 
-    
       <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] backdrop-blur-sm rounded-xl p-6 border border-gray-800">
         <label className="block text-lg font-semibold text-gray-100 mb-4">
           Transaction Type
@@ -212,9 +209,7 @@ export function AddTransactionForm({
         )}
       </div>
 
-      
       <div className="grid gap-8 lg:grid-cols-2">
-       
         <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] backdrop-blur-sm rounded-xl p-6 border border-gray-800">
           <label className="block text-lg font-semibold text-gray-100 mb-4">
             Amount
@@ -239,7 +234,6 @@ export function AddTransactionForm({
           )}
         </div>
 
-       
         <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] backdrop-blur-sm rounded-xl p-6 border border-gray-800">
           <label className="block text-lg font-semibold text-gray-100 mb-4">
             Account
@@ -286,9 +280,7 @@ export function AddTransactionForm({
         </div>
       </div>
 
-     
       <div className="grid gap-8 lg:grid-cols-2">
-      
         <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] backdrop-blur-sm rounded-xl p-6 border border-gray-800">
           <label className="block text-lg font-semibold text-gray-100 mb-4">
             Category
@@ -323,7 +315,6 @@ export function AddTransactionForm({
           )}
         </div>
 
-       
         <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] backdrop-blur-sm rounded-xl p-6 border border-gray-800">
           <label className="block text-lg font-semibold text-gray-100 mb-4">
             Date
@@ -370,7 +361,6 @@ export function AddTransactionForm({
         </div>
       </div>
 
-     
       <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] backdrop-blur-sm rounded-xl p-6 border border-gray-800">
         <label className="block text-lg font-semibold text-gray-100 mb-4">
           Description
@@ -408,7 +398,6 @@ export function AddTransactionForm({
         </div>
       </div>
 
-      
       {isRecurring && (
         <div className="bg-[#111111] backdrop-blur-sm rounded-xl p-6 border border-gray-800 animate-in slide-in-from-top-2 duration-300">
           <label className="block text-lg font-semibold text-gray-100 mb-4">
@@ -459,7 +448,6 @@ export function AddTransactionForm({
         </div>
       )}
 
-      
       <div className="flex gap-6 pt-8">
         <Button
           type="button"

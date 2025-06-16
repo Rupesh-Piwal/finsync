@@ -10,39 +10,26 @@ import {
 } from "@/types";
 
 const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
-  // Create an object to hold serialized fields, starting empty but typed Partial to allow stepwise filling
-  const serialized: Partial<SerializedTransaction> = {};
-
-  for (const key in obj) {
-    if (
-      key === "balance" &&
-      obj.balance !== undefined &&
-      obj.balance !== null
-    ) {
-      // assuming obj.balance has toNumber method
-      serialized.balance = obj.balance.toNumber();
-    } else if (
-      key === "amount" &&
-      obj.amount !== undefined &&
-      obj.amount !== null
-    ) {
-      serialized.amount = obj.amount.toNumber();
-    } else if (
-      key === "id" ||
-      key === "type" ||
-      key === "date" ||
-      key === "category" ||
-      key === "description" ||
-      key === "isRecurring"
-    ) {
-      
-      serialized[key] = obj[key] as any;
-    }
-   
-  }
-
- 
-  return serialized as SerializedTransaction;
+  return {
+    id: obj.id,
+    type: obj.type,
+    amount: obj.amount?.toNumber() || 0,
+    balance: obj.balance?.toNumber(),
+    description: obj.description,
+    date: obj.date?.toISOString() || "",
+    category: obj.category,
+    isRecurring: obj.isRecurring,
+    recurringInterval: obj.recurringInterval,
+    nextRecurringDate: obj.nextRecurringDate,
+    lastProcessed: obj.lastProcessed,
+    status: obj.status,
+    userId: obj.userId,
+    accountId: obj.accountId, // ← This was missing!
+    currency: obj.currency,
+    tags: obj.tags || [],
+    createdAt: obj.createdAt?.toISOString() || "",
+    updatedAt: obj.updatedAt?.toISOString() || "",
+  };
 };
 
 const serializeAccount = (obj: any): SerializedAccount => {

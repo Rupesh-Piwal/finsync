@@ -33,34 +33,10 @@ const COLORS = [
   "#9FA8DA",
 ];
 
-// -----------------------------
-// Type Definitions
-// -----------------------------
-
-// type Account = {
-//   id: string;
-//   name: string;
-//   isDefault: boolean;
-// };
-
-// type Transaction = {
-//   id: string;
-//   accountId: string;
-//   amount: number;
-//   category: string;
-//   date: string | Date;
-//   type: "INCOME" | "EXPENSE";
-//   description?: string;
-// };
-
 type DashboardOverviewProps = {
   accounts: SerializedAccount[];
   transactions: SerializedTransaction[];
 };
-
-// -----------------------------
-// Component
-// -----------------------------
 
 export function DashboardOverview({
   accounts,
@@ -106,11 +82,37 @@ export function DashboardOverview({
     })
   );
 
-  console.log({ selectedAccountId, accountTransactions });
-  console.log({ currentMonthExpenses, pieChartData });
-  console.log("All Transactions:", transactions);
-  console.log("Recent Transactions:", recentTransactions);
-  console.log("Expenses by Category:", expensesByCategory);
+  // More detailed debug logging
+  console.log("=== DETAILED DEBUG INFO ===");
+  console.log(
+    "Selected Account ID:",
+    selectedAccountId,
+    typeof selectedAccountId
+  );
+
+  console.log("All transactions with full details:");
+  transactions.forEach((t, index) => {
+    console.log(`Transaction ${index}:`, {
+      id: t.id,
+      accountId: t.accountId,
+      accountIdType: typeof t.accountId,
+      description: t.description,
+      amount: t.amount,
+      date: t.date,
+      type: t.type,
+    });
+  });
+
+  console.log("Filtered transactions count:", accountTransactions.length);
+
+  // Test each transaction individually
+  console.log("Manual comparison test:");
+  transactions.forEach((t, index) => {
+    const matches = t.accountId === selectedAccountId;
+    console.log(
+      `Transaction ${index} (${t.description}): accountId="${t.accountId}" === selectedAccountId="${selectedAccountId}" ? ${matches}`
+    );
+  });
 
   return (
     <div className="grid gap-4 md:grid-cols-2">

@@ -49,7 +49,7 @@ export interface SerializedTransaction {
 export interface SerializedAccount extends Omit<Account, "balance"> {
   balance: number;
   _count: {
-    transactions: number;
+    transactions: number | string;
   };
 }
 

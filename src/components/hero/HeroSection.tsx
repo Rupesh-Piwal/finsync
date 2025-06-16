@@ -35,7 +35,7 @@ const HeroContent = () => {
           variant="outline"
           className="px-4 py-1.5 rounded-full border-emerald-800/40 bg-emerald-950/30 text-emerald-300 flex items-center gap-2 w-fit mx-auto md:mx-0"
         >
-          <Sparkles size={16} className="text-emerald-300" />
+          <Sparkles size={16} className="text-yellow-400" />
           <span className="font-medium">AI-Powered Receipt Scanning</span>
         </Badge>
 

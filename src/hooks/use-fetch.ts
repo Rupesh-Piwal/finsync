@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-type UseFetchReturn<T> = {
+type UseFetchReturn<T, Args extends any[]> = {
   data: T | undefined;
-  loading: boolean; // Can be null, true, or false
+  loading: boolean;
   error: Error | null;
-  fn: (...args: any[]) => Promise<void>;
+  fn: (...args: Args) => Promise<void>;
   setData: React.Dispatch<React.SetStateAction<T | undefined>>;
 };
 
-export const useFetch = <T>(
-  cb: (...args: any[]) => Promise<T>
-): UseFetchReturn<T> => {
+export const useFetch = <T, Args extends any[] = []>(
+  cb: (...args: Args) => Promise<T>
+): UseFetchReturn<T, Args> => {
   const [data, setData] = useState<T | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const fn = async (...args: any[]): Promise<void> => {
+  const fn = async (...args: Args): Promise<void> => {
     setLoading(true);
     setError(null);
 
@@ -28,7 +28,7 @@ export const useFetch = <T>(
       setError(error);
       toast.error(error.message);
     } finally {
-      setLoading(false); // Becomes false when complete
+      setLoading(false);
     }
   };
 

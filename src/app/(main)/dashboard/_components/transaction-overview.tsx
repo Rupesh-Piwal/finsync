@@ -135,7 +135,7 @@ export function DashboardOverview({
                   </p>
                 </div>
               ) : (
-                recentTransactions.map((transaction, index) => (
+                recentTransactions.map((transaction) => (
                   <div
                     key={transaction.id}
                     className="group flex items-center justify-between p-4 bg-slate-700/30 rounded-xl hover:bg-slate-700/50 transition-all duration-200 border border-slate-700/20 hover:border-teal-500/30"
@@ -233,7 +233,7 @@ export function DashboardOverview({
                       }) => `${name}: $${value.toFixed(2)}`}
                       labelLine={false}
                     >
-                      {pieChartData.map((entry, index) => (
+                      {pieChartData.map((_, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={COLORS[index % COLORS.length]}

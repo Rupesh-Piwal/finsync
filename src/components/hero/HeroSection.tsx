@@ -7,7 +7,6 @@ import { Progress } from "@/components/ui/progress";
 import {
   Sparkles,
   ArrowRight,
-  Play,
   Clock,
   CheckCircle,
   Receipt,
@@ -292,7 +291,8 @@ const ReceiptVisualization = () => {
                                 <div className="flex items-center gap-1.5">
                                   <Sparkles size={14} />
                                   <span>
-                                    Auto-categorized as "Food & Drink"
+                                    Auto-categorized as &quot;Food &amp;
+                                    Drink&quot;
                                   </span>
                                 </div>
                                 <ChevronRight size={14} />

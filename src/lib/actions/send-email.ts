@@ -1,7 +1,6 @@
 "use server";
 
 import { Resend } from "resend";
-import { ReactElement } from "react";
 import { SendEmailProps, SendEmailResponse } from "@/types";
 
 export async function sendEmail({

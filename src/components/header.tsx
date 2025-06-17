@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { LayoutDashboard, BadgePlus } from "lucide-react";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Logo } from "./ui/logo";
 import { checkUser } from "@/lib/checkUser";
 

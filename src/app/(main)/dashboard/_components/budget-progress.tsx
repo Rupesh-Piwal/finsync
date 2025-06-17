@@ -5,23 +5,15 @@ import { Pencil, Check, X } from "lucide-react";
 
 import { toast } from "sonner";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFetch } from "@/hooks/use-fetch";
 import { updateBudget } from "@/lib/actions/budget";
 
-// Define type for initialBudget prop
 interface Budget {
   amount: number;
-  [key: string]: any; // Optional: in case budget object has more props
+  [key: string]: any;
 }
 
 interface BudgetProgressProps {
@@ -147,8 +139,8 @@ export function BudgetProgress({
                   percentUsed >= 90
                     ? "bg-gradient-to-r from-rose-400 to-rose-500"
                     : percentUsed >= 65
-                    ? "bg-gradient-to-r from-amber-400 to-amber-500"
-                    : "bg-gradient-to-r from-emerald-300 to-emerald-500"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500"
+                      : "bg-gradient-to-r from-emerald-300 to-emerald-500"
                 }`}
                 style={{ width: `${percentUsed}%` }}
               />
@@ -160,8 +152,8 @@ export function BudgetProgress({
                   percentUsed >= 90
                     ? "bg-gradient-to-r from-rose-400 to-rose-500 text-transparent bg-clip-text"
                     : percentUsed >= 75
-                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-transparent bg-clip-text"
-                    : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-transparent bg-clip-text"
+                      : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
                 }`}
               >
                 <span className="text-gray-400">Budget remaining</span> (
@@ -173,8 +165,8 @@ export function BudgetProgress({
                   percentUsed >= 90
                     ? "bg-gradient-to-r from-rose-400 to-rose-500 text-transparent bg-clip-text"
                     : percentUsed >= 75
-                    ? "bg-gradient-to-r from-amber-400 to-amber-500 text-transparent bg-clip-text"
-                    : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
+                      ? "bg-gradient-to-r from-amber-400 to-amber-500 text-transparent bg-clip-text"
+                      : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
                 }`}
               >
                 ${(initialBudget.amount - currentExpenses).toFixed(2)}

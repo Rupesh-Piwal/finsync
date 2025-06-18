@@ -26,7 +26,7 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
     lastProcessed: obj.lastProcessed,
     status: obj.status,
     userId: obj.userId,
-    accountId: obj.accountId, 
+    accountId: obj.accountId,
     currency: obj.currency,
     tags: obj.tags || [],
     createdAt: obj.createdAt?.toISOString() || "",
@@ -34,15 +34,15 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
   };
 };
 
-
-
-const serializeAccount = (account: Account): SerializedAccount => {
+const serializeAccount = (
+  account: Account & { _count: { transactions: number | string } }
+): SerializedAccount => {
   const { balance, _count, ...rest } = account;
-  
+
   let balanceNumber: number;
   if (balance instanceof Decimal) {
     balanceNumber = balance.toNumber();
-  } else if (typeof balance === 'number') {
+  } else if (typeof balance === "number") {
     balanceNumber = balance;
   } else {
     balanceNumber = Number(balance) || 0;
@@ -52,8 +52,8 @@ const serializeAccount = (account: Account): SerializedAccount => {
     ...rest,
     balance: balanceNumber,
     _count: {
-      transactions: _count?.transactions ?? 0
-    }
+      transactions: _count?.transactions ?? 0,
+    },
   };
 };
 
@@ -82,7 +82,6 @@ export async function getUserAccounts(): Promise<SerializedAccount[]> {
       },
     });
 
-    
     const serializedAccounts = accounts.map(serializeAccount);
 
     return serializedAccounts;
@@ -111,16 +110,13 @@ export const createAccount = async (data: CreateAccountData) => {
       throw new Error("Invalid balance amount");
     }
 
-    
     const existingAccounts = await db.account.findMany({
       where: { userId: user.id },
     });
 
-  
     const shouldBeDefault =
       existingAccounts.length === 0 ? true : data.isDefault;
 
-   
     if (shouldBeDefault) {
       await db.account.updateMany({
         where: { userId: user.id, isDefault: true },
@@ -128,7 +124,6 @@ export const createAccount = async (data: CreateAccountData) => {
       });
     }
 
-  
     const account = await db.account.create({
       data: {
         ...data,
@@ -138,7 +133,6 @@ export const createAccount = async (data: CreateAccountData) => {
       },
     });
 
-  
     const serializedAccount = serializeTransaction(account);
 
     revalidatePath("/dashboard");
@@ -158,7 +152,6 @@ export async function getDashboardData() {
   if (!user) {
     throw new Error("User not found");
   }
-
 
   const transactions = await db.transaction.findMany({
     where: { userId: user.id },

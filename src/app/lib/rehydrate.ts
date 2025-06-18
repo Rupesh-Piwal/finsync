@@ -1,7 +1,7 @@
-import { Decimal } from "@prisma/client/runtime/library"; // adjust if using 'decimal.js'
-import type { Transaction } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
+import { SerializedTransaction } from "@/types";
 
-export function rehydrateTransaction(transaction: any): Transaction {
+export function rehydrateTransaction(transaction: SerializedTransaction) {
   return {
     ...transaction,
     amount: new Decimal(transaction.amount),

@@ -8,6 +8,8 @@ import {
   SerializedTransaction,
   TransactionLike,
 } from "@/types";
+import { Account } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 
 const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
   return {
@@ -24,7 +26,7 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
     lastProcessed: obj.lastProcessed,
     status: obj.status,
     userId: obj.userId,
-    accountId: obj.accountId, // ← This was missing!
+    accountId: obj.accountId, 
     currency: obj.currency,
     tags: obj.tags || [],
     createdAt: obj.createdAt?.toISOString() || "",
@@ -32,12 +34,27 @@ const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
   };
 };
 
-const serializeAccount = (obj: any): SerializedAccount => {
-  const serialized = { ...obj };
-  if (obj.balance && typeof obj.balance.toNumber === "function") {
-    serialized.balance = obj.balance.toNumber();
+
+
+const serializeAccount = (account: Account): SerializedAccount => {
+  const { balance, _count, ...rest } = account;
+  
+  let balanceNumber: number;
+  if (balance instanceof Decimal) {
+    balanceNumber = balance.toNumber();
+  } else if (typeof balance === 'number') {
+    balanceNumber = balance;
+  } else {
+    balanceNumber = Number(balance) || 0;
   }
-  return serialized;
+
+  return {
+    ...rest,
+    balance: balanceNumber,
+    _count: {
+      transactions: _count?.transactions ?? 0
+    }
+  };
 };
 
 export async function getUserAccounts(): Promise<SerializedAccount[]> {
@@ -65,7 +82,7 @@ export async function getUserAccounts(): Promise<SerializedAccount[]> {
       },
     });
 
-    // Serialize accounts before sending to client
+    
     const serializedAccounts = accounts.map(serializeAccount);
 
     return serializedAccounts;
@@ -75,7 +92,7 @@ export async function getUserAccounts(): Promise<SerializedAccount[]> {
     } else {
       console.error("An unknown error occurred:", error);
     }
-    return []; // Ensure consistent return type
+    return [];
   }
 }
 
@@ -94,17 +111,16 @@ export const createAccount = async (data: CreateAccountData) => {
       throw new Error("Invalid balance amount");
     }
 
-    //  CHECK IF THIS IS THE USER'S FIRST ACCOUNT
+    
     const existingAccounts = await db.account.findMany({
       where: { userId: user.id },
     });
 
-    // If it's the first account, make it default regardless of user input
-    // If not, use the user's preference
+  
     const shouldBeDefault =
       existingAccounts.length === 0 ? true : data.isDefault;
 
-    // If this account should be default, unset other default accounts
+   
     if (shouldBeDefault) {
       await db.account.updateMany({
         where: { userId: user.id, isDefault: true },
@@ -112,17 +128,17 @@ export const createAccount = async (data: CreateAccountData) => {
       });
     }
 
-    // Create new account
+  
     const account = await db.account.create({
       data: {
         ...data,
         balance: balanceFloat,
         userId: user.id,
-        isDefault: shouldBeDefault, // Override the isDefault based on our logic
+        isDefault: shouldBeDefault,
       },
     });
 
-    // Serialize the account before returning
+  
     const serializedAccount = serializeTransaction(account);
 
     revalidatePath("/dashboard");
@@ -143,7 +159,7 @@ export async function getDashboardData() {
     throw new Error("User not found");
   }
 
-  // Get all user transactions
+
   const transactions = await db.transaction.findMany({
     where: { userId: user.id },
     orderBy: { date: "desc" },

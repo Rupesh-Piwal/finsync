@@ -8,7 +8,14 @@ export async function sendEmail({
   subject,
   react,
 }: SendEmailProps): Promise<SendEmailResponse> {
-  const resend = new Resend(process.env.RESEND_API_KEY || "");
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  if (!process.env.RESEND_API_KEY) {
+    return {
+      success: false,
+      error: new Error("RESEND_API_KEY is not configured"),
+    };
+  }
 
   try {
     const data = await resend.emails.send({
@@ -21,6 +28,10 @@ export async function sendEmail({
     return { success: true, data };
   } catch (error) {
     console.error("Failed to send email:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error : new Error("Unknown error occurred"),
+    };
   }
 }

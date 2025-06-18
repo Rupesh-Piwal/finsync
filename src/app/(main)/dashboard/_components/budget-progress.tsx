@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useFetch } from "@/hooks/use-fetch";
 import { updateBudget } from "@/lib/actions/budget";
+import useFetch from "@/hooks/use-fetch";
 
 interface Budget {
   amount: number;

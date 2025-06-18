@@ -110,8 +110,11 @@ export async function createTransaction(data: CreateTransactionInput): Promise<{
     revalidatePath(`/account/${transaction.accountId}`);
 
     return { success: true, data: serializeAmount(transaction) };
-  } catch (error: any) {
-    throw new Error(error?.message || "Something went wrong");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unknown error occurred");
   }
 }
 
@@ -200,8 +203,11 @@ export async function updateTransaction(
     revalidatePath(`/account/${data.accountId}`);
 
     return { success: true, data: serializeAmount(transaction) };
-  } catch (error: any) {
-    throw new Error(error?.message || "Failed to update transaction");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unknown error occurred");
   }
 }
 

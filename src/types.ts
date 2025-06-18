@@ -1,6 +1,7 @@
 import { Account, AccountType, Budget } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { ReactElement } from "react";
+import { CreateEmailResponse } from "resend";
 
 export interface CreateAccountData {
   name: string;
@@ -71,16 +72,23 @@ export interface BudgetProgressProps {
   currentExpenses: number;
 }
 
-export interface SendEmailProps {
-  to: string | string[];
-  subject: string;
-  react: ReactElement;
+export interface ResendEmailData {
+  id: string;
+  from: string;
+  to: string[];
+  created_at: string;
 }
 
 export interface SendEmailResponse {
   success: boolean;
-  data?: any;
+  data?: CreateEmailResponse;
   error?: Error | unknown;
+}
+
+export interface SendEmailProps {
+  to: string | string[];
+  subject: string;
+  react: React.ReactElement;
 }
 
 export interface AddTransactionPageProps {

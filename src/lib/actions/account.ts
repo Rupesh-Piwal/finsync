@@ -176,7 +176,6 @@ export async function bulkDeleteTransactions(
     );
 
     await db.$transaction(async (tx) => {
-      
       await tx.transaction.deleteMany({
         where: {
           id: { in: transactionIds },
@@ -203,7 +202,8 @@ export async function bulkDeleteTransactions(
     revalidatePath("/account/[id]");
 
     return { success: true };
-  } catch (error: any) {
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
     return { success: false, error: error.message };
   }
 }

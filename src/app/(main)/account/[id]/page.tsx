@@ -1,9 +1,5 @@
 import { getAccountWithTransactions } from "@/lib/actions/account";
-import {
-  AccountPageProps,
-  SerializedAccount,
-  SerializedTransaction,
-} from "@/types";
+import { AccountPageProps } from "@/types";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { BarLoader } from "react-spinners";
@@ -11,14 +7,8 @@ import TransactionTable from "../_components/transaction-table";
 import { CreditCard, ArrowUpDown } from "lucide-react";
 import { AccountChart } from "../_components/account-chart";
 
-type AccountData = {
-  transactions: SerializedTransaction[];
-} & SerializedAccount;
-
 const Account = async ({ params }: AccountPageProps) => {
-  const accountData: AccountData | null = await getAccountWithTransactions(
-    params.id
-  );
+  const accountData = await getAccountWithTransactions(params.id);
 
   if (!accountData) {
     notFound();

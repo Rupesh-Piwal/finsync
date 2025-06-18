@@ -12,10 +12,7 @@ type UseFetchReturn<
   setData: React.Dispatch<React.SetStateAction<T | undefined>>;
 };
 
-export const useFetch = <
-  T,
-  TArgs extends readonly unknown[] = readonly unknown[],
->(
+const useFetch = <T, TArgs extends readonly unknown[] = readonly unknown[]>(
   cb: (...args: TArgs) => Promise<T>
 ): UseFetchReturn<T, TArgs> => {
   const [data, setData] = useState<T | undefined>(undefined);
@@ -41,3 +38,5 @@ export const useFetch = <
 
   return { data, loading, error, fn, setData };
 };
+
+export default useFetch;

@@ -12,15 +12,6 @@ import { updateBudget } from "@/lib/actions/budget";
 import useFetch from "@/hooks/use-fetch";
 import { BudgetProgressProps } from "@/types";
 
-interface Budget {
-  amount: number;
-  id?: string;
-  name?: string;
-  category?: string;
-  period?: "monthly" | "weekly" | "yearly";
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 export function BudgetProgress({
   initialBudget,

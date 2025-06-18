@@ -1,4 +1,4 @@
-import { Account, AccountType, Budget } from "@prisma/client";
+import { Account, AccountType, Budget, TransactionType } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { CreateEmailResponse } from "resend";
 
@@ -21,10 +21,26 @@ export interface BudgetProgressProps {
 export interface AccountPageProps {
   params: Promise<{ id: string }>;
 }
-export interface TransactionLike {
-  [key: string]: any;
-  balance?: { toNumber(): number };
-  amount?: { toNumber(): number };
+export interface TransactionLike extends Record<string, unknown> {
+  id?: string;
+  type?: TransactionType;
+  userId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  amount?: Decimal; // Decimal type, not { toNumber(): number }
+  balance?: Decimal;
+  description?: string;
+  date?: Date;
+  category?: string;
+  isRecurring?: boolean;
+  recurringInterval?: string;
+  nextRecurringDate?: Date; // Date, not string
+  lastProcessed?: string;
+  status?: string;
+  accountId?: string;
+  currency?: string;
+  tags?: string[];
+  receiptUrl?: string;
 }
 
 export interface SerializedTransaction {

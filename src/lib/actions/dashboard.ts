@@ -8,29 +8,31 @@ import {
   SerializedTransaction,
   TransactionLike,
 } from "@/types";
-import { Account } from "@prisma/client";
+import { Account, TransactionType } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
-const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
+const serializeTransaction = <T extends Record<string, unknown>>(
+  obj: T
+): SerializedTransaction => {
   return {
-    id: obj.id,
-    type: obj.type,
-    amount: obj.amount?.toNumber() || 0,
-    balance: obj.balance?.toNumber(),
-    description: obj.description,
-    date: obj.date?.toISOString() || "",
-    category: obj.category,
-    isRecurring: obj.isRecurring,
-    recurringInterval: obj.recurringInterval,
-    nextRecurringDate: obj.nextRecurringDate,
-    lastProcessed: obj.lastProcessed,
-    status: obj.status,
-    userId: obj.userId,
-    accountId: obj.accountId,
-    currency: obj.currency,
-    tags: obj.tags || [],
-    createdAt: obj.createdAt?.toISOString() || "",
-    updatedAt: obj.updatedAt?.toISOString() || "",
+    id: (obj.id as string) || "",
+    type: obj.type as TransactionType,
+    amount: (obj.amount as Decimal)?.toNumber() || 0,
+    balance: (obj.balance as Decimal)?.toNumber(),
+    description: (obj.description as string) || "",
+    date: (obj.date as Date)?.toISOString() || "",
+    category: (obj.category as string) || "",
+    isRecurring: obj.isRecurring as boolean,
+    recurringInterval: obj.recurringInterval as string,
+    nextRecurringDate: (obj.nextRecurringDate as Date)?.toISOString() || "",
+    lastProcessed: obj.lastProcessed as string,
+    status: obj.status as string,
+    userId: (obj.userId as string) || "",
+    accountId: obj.accountId as string,
+    currency: obj.currency as string,
+    tags: (obj.tags as string[]) || [],
+    createdAt: (obj.createdAt as Date)?.toISOString() || "",
+    updatedAt: (obj.updatedAt as Date)?.toISOString() || "",
   };
 };
 

@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import { Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useFetch } from "@/hooks/use-fetch";
+import  useFetch  from "@/hooks/use-fetch";
 import { scanReceipt } from "@/lib/actions/transactions";
 
 interface ReceiptScannerProps {

@@ -23,8 +23,9 @@ import { Switch } from "./ui/switch";
 import { accountSchema, type AccountFormData } from "@/app/lib/schema";
 import { createAccount } from "@/lib/actions/dashboard";
 import { Loader2 } from "lucide-react";
-import  useFetch  from "@/hooks/use-fetch";
+import useFetch from "@/hooks/use-fetch";
 import { toast } from "sonner";
+import { CreateAccountData } from "@/types";
 
 type CreateAccountDrawerProps = {
   children: React.ReactNode;
@@ -59,7 +60,7 @@ const CreateAccountDrawer = ({ children }: CreateAccountDrawerProps) => {
   } = useFetch(createAccount);
 
   const onSubmit = async (data: AccountFormData) => {
-    await createAccountFn(data);
+    await createAccountFn(data as CreateAccountData);
   };
 
   useEffect(() => {

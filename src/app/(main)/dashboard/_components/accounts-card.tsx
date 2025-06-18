@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { useFetch } from "@/hooks/use-fetch";
+import useFetch  from "@/hooks/use-fetch";
 import { updateDefaultAccount } from "@/lib/actions/account";
 import { SerializedAccount } from "@/types";
 

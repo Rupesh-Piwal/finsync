@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { updateBudget } from "@/lib/actions/budget";
 import useFetch from "@/hooks/use-fetch";
+import { Decimal } from "@prisma/client/runtime/library";
 interface Budget {
   amount: number;
   id?: string;
@@ -53,7 +54,9 @@ export function BudgetProgress({
       return;
     }
 
-    await updateBudgetFn(amount);
+    const decimalAmount = new Decimal(amount); 
+
+    await updateBudgetFn(decimalAmount);
   };
 
   const handleCancel = () => {
@@ -70,7 +73,7 @@ export function BudgetProgress({
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message || "Failed to update budget");
+      toast.error(error.message);
     }
   }, [error]);
 

@@ -14,11 +14,8 @@ export interface AccountCardProps {
 }
 
 export interface AccountPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
-
 export interface TransactionLike {
   [key: string]: unknown;
   balance?: { toNumber(): number };

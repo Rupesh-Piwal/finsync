@@ -7,7 +7,6 @@ import { CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -27,7 +26,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { TransactionFormData, transactionSchema } from "@/app/lib/schema";
 import { Account, Transaction } from "@prisma/client";
-import { useFetch } from "@/hooks/use-fetch";
+import useFetch from "@/hooks/use-fetch";
 import CreateAccountDrawer from "@/components/create-account-drawer";
 import {
   createTransaction,
@@ -90,24 +89,37 @@ export function AddTransactionForm({
   });
 
   const {
-    loading: transactionLoading,
-    fn: transactionFn,
-    data: transactionResult,
-  } = useFetch(editMode ? updateTransaction : createTransaction);
+    loading: updateLoading,
+    fn: updateFn,
+    data: updateResult,
+  } = useFetch(updateTransaction);
+
+  const {
+    loading: createLoading,
+    fn: createFn,
+    data: createResult,
+  } = useFetch(createTransaction);
+
+  const transactionLoading = editMode ? updateLoading : createLoading;
+  const transactionResult = editMode ? updateResult : createResult;
 
   const onSubmit = (data: TransactionFormData) => {
     const formData = {
       ...data,
       amount: parseFloat(data.amount),
+      date: data.date.toISOString(),
     };
 
     if (editMode) {
-      transactionFn(editId, formData);
+      if (!editId) {
+        console.error("editId is required in edit mode");
+        return;
+      }
+      updateFn(editId, formData);
     } else {
-      transactionFn(formData);
+      createFn(formData);
     }
   };
-
   const handleScanComplete = (data: unknown) => {
     if (
       typeof data === "object" &&

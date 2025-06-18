@@ -23,7 +23,7 @@ import { Switch } from "./ui/switch";
 import { accountSchema, type AccountFormData } from "@/app/lib/schema";
 import { createAccount } from "@/lib/actions/dashboard";
 import { Loader2 } from "lucide-react";
-import { useFetch } from "@/hooks/use-fetch";
+import  useFetch  from "@/hooks/use-fetch";
 import { toast } from "sonner";
 
 type CreateAccountDrawerProps = {

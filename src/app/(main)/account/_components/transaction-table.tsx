@@ -32,7 +32,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useFetch } from "@/hooks/use-fetch";
+
 import { bulkDeleteTransactions } from "@/lib/actions/account";
 import { cn } from "@/lib/utils";
 import { TransactionTableProps } from "@/types";
@@ -54,6 +54,7 @@ import { useEffect, useMemo, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { toast } from "sonner";
 import { categoryColors } from "../../../../../data/categories";
+import useFetch from "@/hooks/use-fetch";
 
 const ITEMS_PER_PAGE = 10;
 

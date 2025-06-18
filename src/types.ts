@@ -1,4 +1,10 @@
-import { Account, AccountType, Budget, RecurringInterval, TransactionType } from "@prisma/client";
+import {
+  Account,
+  AccountType,
+  Budget,
+  RecurringInterval,
+  TransactionType,
+} from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { CreateEmailResponse } from "resend";
 
@@ -43,12 +49,23 @@ export interface TransactionLike extends Record<string, unknown> {
   receiptUrl?: string;
 }
 
-
+export interface FormInitialData {
+  id?: string;
+  type?: TransactionType; // Explicitly use TransactionType
+  amount?: Decimal;
+  description?: string;
+  date?: Date;
+  category?: string;
+  isRecurring?: boolean;
+  recurringInterval?: RecurringInterval;
+  accountId?: string;
+  // ... other properties you need
+}
 export interface CreateTransactionInput {
   accountId: string;
   amount: number;
   category: string;
-  date:  string;
+  date: string;
   description?: string;
   isRecurring: boolean;
   recurringInterval?: RecurringInterval;
@@ -61,11 +78,12 @@ export interface SerializedTransaction {
   amount: number;
   balance?: number | Decimal;
   description?: string;
-  date: string; // serialized DateTime
+  date: Date | string; // serialized DateTime
   category: string;
   isRecurring: boolean;
   recurringInterval?: string;
   nextRecurringDate?: string;
+  receiptUrl?: string | null;
   lastProcessed?: string;
   status: string;
   userId: string;

@@ -8,7 +8,8 @@ import { CreditCard, ArrowUpDown } from "lucide-react";
 import { AccountChart } from "../_components/account-chart";
 
 const Account = async ({ params }: AccountPageProps) => {
-  const accountData = await getAccountWithTransactions(params.id);
+  const resolvedParams = await params;
+  const accountData = await getAccountWithTransactions(resolvedParams.id);
 
   if (!accountData) {
     notFound();

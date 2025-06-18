@@ -13,6 +13,11 @@ export interface AccountCardProps {
   account: Account;
 }
 
+export interface BudgetProgressProps {
+  initialBudget: Budget | null;
+  currentExpenses: number;
+}
+
 export interface AccountPageProps {
   params: Promise<{ id: string }>;
 }

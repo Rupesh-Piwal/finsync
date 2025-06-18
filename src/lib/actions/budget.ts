@@ -64,7 +64,8 @@ export async function getCurrentBudget(accountId: string) {
   }
 }
 
-export async function updateBudget(amount: Decimal) {
+export async function updateBudget(amount: number) {
+  const decimalAmount = new Decimal(amount);
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -81,11 +82,11 @@ export async function updateBudget(amount: Decimal) {
         userId: user.id,
       },
       update: {
-        amount,
+        amount: decimalAmount,
       },
       create: {
         userId: user.id,
-        amount,
+        amount: decimalAmount,
       },
     });
 

@@ -10,7 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { updateBudget } from "@/lib/actions/budget";
 import useFetch from "@/hooks/use-fetch";
-import { Decimal } from "@prisma/client/runtime/library";
+import { BudgetProgressProps } from "@/types";
+
 interface Budget {
   amount: number;
   id?: string;
@@ -19,11 +20,6 @@ interface Budget {
   period?: "monthly" | "weekly" | "yearly";
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-interface BudgetProgressProps {
-  initialBudget: Budget | null;
-  currentExpenses: number;
 }
 
 export function BudgetProgress({
@@ -43,7 +39,7 @@ export function BudgetProgress({
   } = useFetch(updateBudget);
 
   const percentUsed: number = initialBudget
-    ? (currentExpenses / initialBudget.amount) * 100
+    ? (currentExpenses / initialBudget.amount.toNumber()) * 100
     : 0;
 
   const handleUpdateBudget = async () => {
@@ -54,9 +50,7 @@ export function BudgetProgress({
       return;
     }
 
-    const decimalAmount = new Decimal(amount); 
-
-    await updateBudgetFn(decimalAmount);
+    await updateBudgetFn(amount); // ✅ just pass number
   };
 
   const handleCancel = () => {
@@ -176,7 +170,7 @@ export function BudgetProgress({
                       : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
                 }`}
               >
-                ${(initialBudget.amount - currentExpenses).toFixed(2)}
+                ${(initialBudget.amount.toNumber() - currentExpenses).toFixed(2)}
                 <span className="text-xs ml-1 font-normal text-gray-400 ">
                   ({percentUsed.toFixed(1)}%)
                 </span>

@@ -10,10 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { updateBudget } from "@/lib/actions/budget";
 import useFetch from "@/hooks/use-fetch";
-
 interface Budget {
   amount: number;
-  [key: string]: any;
+  id?: string;
+  name?: string;
+  category?: string;
+  period?: "monthly" | "weekly" | "yearly";
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface BudgetProgressProps {

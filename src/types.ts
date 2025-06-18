@@ -1,6 +1,5 @@
 import { Account, AccountType, Budget } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
-import { ReactElement } from "react";
 import { CreateEmailResponse } from "resend";
 
 export interface CreateAccountData {
@@ -21,7 +20,7 @@ export interface AccountPageProps {
 }
 
 export interface TransactionLike {
-  [key: string]: any;
+  [key: string]: unknown;
   balance?: { toNumber(): number };
   amount?: { toNumber(): number };
 }

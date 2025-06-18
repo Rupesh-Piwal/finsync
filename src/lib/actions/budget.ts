@@ -94,8 +94,10 @@ export async function updateBudget(amount: Decimal) {
       success: true,
       data: { ...budget, amount: budget.amount.toNumber() },
     };
-  } catch (error: any) {
-    console.error("Error updating budget:", error);
-    return { success: false, error: error.message };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unknown error occurred");
   }
 }

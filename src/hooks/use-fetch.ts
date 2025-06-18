@@ -1,20 +1,28 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-type UseFetchReturn<T> = {
+type UseFetchReturn<
+  T,
+  TArgs extends readonly unknown[] = readonly unknown[],
+> = {
   data: T | undefined;
   loading: boolean;
   error: Error | null;
-  fn: (...args: any[]) => Promise<void>;
+  fn: (...args: TArgs) => Promise<void>;
   setData: React.Dispatch<React.SetStateAction<T | undefined>>;
 };
 
-const useFetch = <T>(cb: (...args: any[]) => Promise<T>): UseFetchReturn<T> => {
+export const useFetch = <
+  T,
+  TArgs extends readonly unknown[] = readonly unknown[],
+>(
+  cb: (...args: TArgs) => Promise<T>
+): UseFetchReturn<T, TArgs> => {
   const [data, setData] = useState<T | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const fn = async (...args: any[]): Promise<void> => {
+  const fn = async (...args: TArgs): Promise<void> => {
     setLoading(true);
     setError(null);
 
@@ -33,5 +41,3 @@ const useFetch = <T>(cb: (...args: any[]) => Promise<T>): UseFetchReturn<T> => {
 
   return { data, loading, error, fn, setData };
 };
-
-export default useFetch;

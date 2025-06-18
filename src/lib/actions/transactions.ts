@@ -246,7 +246,7 @@ export async function getUserTransactions(query = {}) {
   }
 }
 
-export async function scanReceipt(file: File): Promise<ScannedReceipt | {}> {
+export async function scanReceipt(file: File): Promise<ScannedReceipt | null> {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -291,7 +291,7 @@ export async function scanReceipt(file: File): Promise<ScannedReceipt | {}> {
       const data = JSON.parse(cleanedText);
 
       if (!data || typeof data !== "object" || Object.keys(data).length === 0) {
-        return {};
+        return null;
       }
 
       return {

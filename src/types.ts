@@ -1,4 +1,4 @@
-import { Account, AccountType, Budget, TransactionType } from "@prisma/client";
+import { Account, AccountType, Budget, RecurringInterval, TransactionType } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { CreateEmailResponse } from "resend";
 
@@ -41,6 +41,18 @@ export interface TransactionLike extends Record<string, unknown> {
   currency?: string;
   tags?: string[];
   receiptUrl?: string;
+}
+
+
+export interface CreateTransactionInput {
+  accountId: string;
+  amount: number;
+  category: string;
+  date:  string;
+  description?: string;
+  isRecurring: boolean;
+  recurringInterval?: RecurringInterval;
+  type: TransactionType;
 }
 
 export interface SerializedTransaction {

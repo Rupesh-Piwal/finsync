@@ -32,7 +32,7 @@ import {
   createTransaction,
   updateTransaction,
 } from "@/lib/actions/transactions";
-import { Category, ScannedData } from "@/types";
+import { Category, CreateTransactionInput, ScannedData } from "@/types";
 import { ReceiptScanner } from "./receipt-scanner";
 
 type RecurringInterval = "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
@@ -104,10 +104,16 @@ export function AddTransactionForm({
   const transactionResult = editMode ? updateResult : createResult;
 
   const onSubmit = (data: TransactionFormData) => {
-    const formData = {
-      ...data,
+    // Transform the form data to match CreateTransactionInput
+    const formData: CreateTransactionInput = {
+      accountId: data.accountId,
       amount: parseFloat(data.amount),
-      date: data.date.toISOString(),
+      category: data.category,
+      date: data.date.toISOString(), // or just data.date if you want Date type
+      description: data.description,
+      isRecurring: data.isRecurring,
+      recurringInterval: data.recurringInterval,
+      type: data.type,
     };
 
     if (editMode) {
@@ -120,6 +126,7 @@ export function AddTransactionForm({
       createFn(formData);
     }
   };
+
   const handleScanComplete = (data: unknown) => {
     if (
       typeof data === "object" &&

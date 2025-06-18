@@ -5,25 +5,15 @@ import { db } from "../prisma";
 import { revalidatePath } from "next/cache";
 import type {
   Transaction,
-  TransactionType,
   RecurringInterval,
 } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { request } from "@arcjet/next";
 import aj from "@/app/lib/arcjet";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { ScannedReceipt } from "@/types";
+import { CreateTransactionInput, ScannedReceipt } from "@/types";
 
-interface CreateTransactionInput {
-  accountId: string;
-  amount: number;
-  category: string;
-  date: Date | string;
-  description?: string;
-  isRecurring: boolean;
-  recurringInterval?: RecurringInterval;
-  type: TransactionType;
-}
+
 
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {

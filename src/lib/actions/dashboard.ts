@@ -6,7 +6,6 @@ import {
   CreateAccountData,
   SerializedAccount,
   SerializedTransaction,
-  TransactionLike,
 } from "@/types";
 import { Account, TransactionType } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";

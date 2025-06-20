@@ -14,7 +14,6 @@ const layout = () => {
         fallback={
           <div className="w-full flex justify-center">
             <BarLoader className="mt-4" width={"100%"} color="#0D9488" />{" "}
-            {/* Changed to teal color to match the theme */}
           </div>
         }
       >

@@ -16,7 +16,6 @@ const page = async () => {
 
   const defaultAccount = accounts?.find((account) => account.isDefault);
 
-  // Get budget for default account
   let budgetData = null;
   if (defaultAccount) {
     budgetData = await getCurrentBudget(defaultAccount.id);
@@ -24,19 +23,18 @@ const page = async () => {
 
   return (
     <div className="sapce-y-8">
-      {/* BUDGET PROCESS  */}
+      
       <BudgetProgress
         initialBudget={budgetData?.budget ?? null}
         currentExpenses={budgetData?.currentExpenses || 0}
       />
 
-      {/* Dashboard Overview */}
+     
       <DashboardOverview
         accounts={accounts}
         transactions={transactions || []}
       />
 
-      {/* ACCOUNTS GRID  */}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <CreateAccountDrawer>

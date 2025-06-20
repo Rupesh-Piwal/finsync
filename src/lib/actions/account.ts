@@ -11,25 +11,29 @@ import {
 } from "@/types";
 import { Account } from "@prisma/client";
 
-const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
-  return {
-    id: obj.id,
-    type: obj.type,
-    amount: obj.amount?.toNumber() ?? 0,
-    date: obj.date,
-    category: obj.category,
-    description: obj.description,
-    status: obj.status,
-    accountId: obj.account, // assuming this maps to accountId
-    tags: obj.tags ?? [],
-    balance: obj.balance?.toNumber() ?? 0,
-    isRecurring: obj.isRecurring ?? false,
-    userId: obj.userId,
-    currency: obj.currency ?? "USD", // fallback if needed
-    createdAt: obj.createdAt,
-    updatedAt: obj.updatedAt,
-  };
-};
+// const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
+//   if (!obj.accountId) {
+//     throw new Error("Missing accountId in transaction");
+//   }
+
+//   return {
+//     id: obj.id,
+//     type: obj.type,
+//     amount: obj.amount?.toNumber() ?? 0,
+//     date: obj.date,
+//     category: obj.category,
+//     description: obj.description,
+//     status: obj.status,
+//     accountId: obj.accountId,
+//     tags: obj.tags ?? [],
+//     balance: obj.balance?.toNumber() ?? 0,
+//     isRecurring: obj.isRecurring ?? false,
+//     userId: obj.userId,
+//     currency: obj.currency ?? "USD",
+//     createdAt: obj.createdAt?.toISOString(),
+//     updatedAt: obj.updatedAt?.toISOString(),
+//   };
+// };
 
 const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   const serialized = obj as unknown as SerializedTransaction;
@@ -128,7 +132,12 @@ export async function updateDefaultAccount(accountId: string) {
     });
 
     revalidatePath("/dashboard");
-    return { success: true, data: serializeTransaction(account) };
+    return {
+      success: true,
+      data: serializeAccount(
+        account as Account & { _count: { transactions: number } }
+      ),
+    };
   } catch (error) {
     if (error instanceof Error) {
       return { success: false, error: error.message };

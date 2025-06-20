@@ -41,9 +41,9 @@ export interface TransactionLike extends Record<string, unknown> {
   isRecurring?: boolean;
   recurringInterval?: string;
   nextRecurringDate?: Date; // Date, not string
-  lastProcessed?: string;
+  lastProcessed?: string | Date;
   status?: string;
-  accountId?: string;
+  accountId?: string | undefined;
   currency?: string;
   tags?: string[];
   receiptUrl?: string;
@@ -90,8 +90,8 @@ export interface SerializedTransaction {
   accountId: string;
   currency: string;
   tags: string[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface SerializedAccount extends Omit<Account, "balance"> {

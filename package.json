@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "email": "email dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio"
   },

@@ -12,7 +12,6 @@ import { updateBudget } from "@/lib/actions/budget";
 import useFetch from "@/hooks/use-fetch";
 import { BudgetProgressProps } from "@/types";
 
-
 export function BudgetProgress({
   initialBudget,
   currentExpenses,
@@ -29,9 +28,10 @@ export function BudgetProgress({
     error,
   } = useFetch(updateBudget);
 
-  const percentUsed: number = initialBudget
-    ? (currentExpenses / initialBudget.amount.toNumber()) * 100
-    : 0;
+  const percentUsed: number =
+    initialBudget && !isNaN(Number(initialBudget.amount))
+      ? (currentExpenses / Number(initialBudget.amount)) * 100
+      : 0;
 
   const handleUpdateBudget = async () => {
     const amount = parseFloat(newBudget);
@@ -41,7 +41,7 @@ export function BudgetProgress({
       return;
     }
 
-    await updateBudgetFn(amount); // ✅ just pass number
+    await updateBudgetFn(amount);
   };
 
   const handleCancel = () => {
@@ -161,7 +161,8 @@ export function BudgetProgress({
                       : "bg-gradient-to-r from-emerald-300 to-emerald-500 text-transparent bg-clip-text"
                 }`}
               >
-                ${(initialBudget.amount.toNumber() - currentExpenses).toFixed(2)}
+                $
+                {(initialBudget.amount.toNumber() - currentExpenses).toFixed(2)}
                 <span className="text-xs ml-1 font-normal text-gray-400 ">
                   ({percentUsed.toFixed(1)}%)
                 </span>

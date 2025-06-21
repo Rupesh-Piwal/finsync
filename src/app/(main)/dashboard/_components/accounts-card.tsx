@@ -65,8 +65,6 @@ export function AccountCard({ account }: AccountCardProps) {
       <div
         className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-95 z-0`}
       />
-      {/* <div className="absolute -right-6 -top-6 w-24 h-24 bg-teal-900/20 rounded-full blur-xl z-0" />
-      <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-teal-900/10 rounded-full blur-xl z-0" /> */}
 
       <Link href={`/account/${id}`} className="relative z-10 block">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b border-gray-700/30">

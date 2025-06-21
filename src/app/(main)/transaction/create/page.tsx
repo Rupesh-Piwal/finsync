@@ -3,7 +3,6 @@ import { AddTransactionForm } from "../_components/transaction-form";
 import { getTransaction } from "@/lib/actions/transactions";
 import { AddTransactionPageProps } from "@/types";
 import { defaultCategories } from "../../../../../data/categories";
-import { Decimal } from "@prisma/client/runtime/library";
 import { rehydrateTransaction } from "@/app/lib/rehydrate";
 
 export default async function AddTransactionPage({
@@ -18,12 +17,14 @@ export default async function AddTransactionPage({
     initialData = transaction;
   }
 
-  const decimalAccounts = accounts.map((a) => ({
-    ...a,
-    balance: new Decimal(a.balance),
+  const serializedAccounts = accounts.map((account) => ({
+    ...account,
+    balance: Number(account.balance),
   }));
 
-  const safeIntialData = initialData ? rehydrateTransaction(initialData) : null;
+  const safeInitialData = initialData
+    ? rehydrateTransaction(initialData)
+    : null;
 
   return (
     <div className="min-h-screen bg-[#111111] relative overflow-hidden">
@@ -39,10 +40,10 @@ export default async function AddTransactionPage({
         <div className="relative">
           <div className="relative bg-[#1b1b1b] backdrop-blur-xl rounded-3xl border border-slate-700/50 shadow-2xl md:py-5 p-1 md:px-0">
             <AddTransactionForm
-              accounts={decimalAccounts}
+              accounts={serializedAccounts} 
               categories={defaultCategories}
               editMode={!!editId}
-              initialData={safeIntialData}
+              initialData={safeInitialData}
             />
           </div>
         </div>

@@ -25,14 +25,19 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { TransactionFormData, transactionSchema } from "@/app/lib/schema";
-import { Account, Transaction } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import useFetch from "@/hooks/use-fetch";
 import CreateAccountDrawer from "@/components/create-account-drawer";
 import {
   createTransaction,
   updateTransaction,
 } from "@/lib/actions/transactions";
-import { Category, CreateTransactionInput, ScannedData } from "@/types";
+import {
+  Category,
+  CreateTransactionInput,
+  ScannedData,
+  SerializedAccount,
+} from "@/types";
 import { ReceiptScanner } from "./receipt-scanner";
 
 type RecurringInterval = "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
@@ -43,7 +48,7 @@ export function AddTransactionForm({
   editMode = false,
   initialData = null,
 }: {
-  accounts: Account[];
+  accounts: SerializedAccount[]; // Use SerializedAccount type
   categories: Category[];
   editMode: boolean;
   initialData?: Transaction | null;
@@ -104,7 +109,6 @@ export function AddTransactionForm({
   const transactionResult = editMode ? updateResult : createResult;
 
   const onSubmit = (data: TransactionFormData) => {
-    // Transform the form data to match CreateTransactionInput
     const formData: CreateTransactionInput = {
       accountId: data.accountId,
       amount: parseFloat(data.amount),
@@ -274,7 +278,7 @@ export function AddTransactionForm({
                   <div className="flex items-center justify-between w-full">
                     <span>{account.name}</span>
                     <span className="text-teal-400 font-medium ml-2">
-                      ${Number(account.balance).toFixed(2)}
+                      ${account.balance.toFixed(2)}
                     </span>
                   </div>
                 </SelectItem>

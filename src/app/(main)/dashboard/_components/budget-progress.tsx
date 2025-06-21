@@ -162,7 +162,9 @@ export function BudgetProgress({
                 }`}
               >
                 $
-                {(initialBudget.amount.toNumber() - currentExpenses).toFixed(2)}
+                {(
+                  (Number(initialBudget?.amount) || 0) - currentExpenses
+                ).toFixed(2)}
                 <span className="text-xs ml-1 font-normal text-gray-400 ">
                   ({percentUsed.toFixed(1)}%)
                 </span>

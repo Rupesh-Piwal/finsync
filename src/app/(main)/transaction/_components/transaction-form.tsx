@@ -63,10 +63,10 @@ export function AddTransactionForm({
     formState: { errors },
     watch,
     setValue,
-    getValues,
     reset,
   } = useForm({
     resolver: zodResolver(transactionSchema),
+    mode: "onChange",
     defaultValues:
       editMode && initialData
         ? {
@@ -113,7 +113,7 @@ export function AddTransactionForm({
       accountId: data.accountId,
       amount: parseFloat(data.amount),
       category: data.category,
-      date: data.date.toISOString(), // or just data.date if you want Date type
+      date: data.date.toISOString(),
       description: data.description,
       isRecurring: data.isRecurring,
       recurringInterval: data.recurringInterval,
@@ -181,6 +181,7 @@ export function AddTransactionForm({
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-4xl mx-auto space-y-8 px-4 py-8 md:p-8 bg-[#111111] rounded-2xl shadow-2xl border border-gray-800"
+      suppressHydrationWarning
     >
       <div className="text-center pb-6 border-b border-gray-800">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
@@ -201,9 +202,12 @@ export function AddTransactionForm({
           onValueChange={(value: "INCOME" | "EXPENSE") =>
             setValue("type", value)
           }
-          defaultValue={type}
+          value={type}
         >
-          <SelectTrigger className="w-full h-14 bg-[#111111] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200">
+          <SelectTrigger
+            className="w-full h-14 bg-[#111111] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200"
+            suppressHydrationWarning
+          >
             <SelectValue
               placeholder="Select transaction type"
               className="text-gray-300"
@@ -247,6 +251,7 @@ export function AddTransactionForm({
               placeholder="0.00"
               className="h-14 pl-10 bg-[#111111] border-gray-800 text-gray-100 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 text-lg font-medium transition-all duration-200"
               {...register("amount")}
+              suppressHydrationWarning
             />
           </div>
           {errors.amount && (
@@ -263,9 +268,12 @@ export function AddTransactionForm({
           </label>
           <Select
             onValueChange={(value) => setValue("accountId", value)}
-            defaultValue={getValues("accountId")}
+            value={watch("accountId")}
           >
-            <SelectTrigger className="w-full h-14 bg-[#111111] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200">
+            <SelectTrigger
+              className="w-full h-14 bg-[#111111] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200"
+              suppressHydrationWarning
+            >
               <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent className="bg-[#111111] border-gray-800">
@@ -310,9 +318,12 @@ export function AddTransactionForm({
           </label>
           <Select
             onValueChange={(value) => setValue("category", value)}
-            defaultValue={getValues("category")}
+            value={watch("category")}
           >
-            <SelectTrigger className="w-full h-14 bg-[#111111] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200">
+            <SelectTrigger
+              className="w-full h-14 bg-[#111111] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200"
+              suppressHydrationWarning
+            >
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent className="bg-[#111111] border-gray-800">
@@ -392,6 +403,7 @@ export function AddTransactionForm({
           placeholder="Enter transaction description..."
           {...register("description")}
           className="w-full h-14 bg-[#111111] border-gray-800 text-gray-100 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200"
+          suppressHydrationWarning
         />
         {errors.description && (
           <p className="mt-3 text-sm text-red-400 flex items-center gap-2">
@@ -401,7 +413,6 @@ export function AddTransactionForm({
         )}
       </div>
 
-      {/* Recurring Toggle - Enhanced Card */}
       <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] backdrop-blur-sm rounded-xl p-6 border border-gray-800">
         <div className="flex flex-row items-center justify-between">
           <div className="space-y-2">
@@ -430,9 +441,12 @@ export function AddTransactionForm({
             onValueChange={(value) =>
               setValue("recurringInterval", value as RecurringInterval)
             }
-            defaultValue={getValues("recurringInterval")}
+            value={watch("recurringInterval")}
           >
-            <SelectTrigger className="w-full h-14 bg-[#1a1a1a] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200">
+            <SelectTrigger
+              className="w-full h-14 bg-[#1a1a1a] border-gray-800 text-gray-100 hover:bg-gray-800/70 focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition-all duration-200"
+              suppressHydrationWarning
+            >
               <SelectValue placeholder="Select recurring interval" />
             </SelectTrigger>
             <SelectContent className="bg-[#111111] border-gray-800">

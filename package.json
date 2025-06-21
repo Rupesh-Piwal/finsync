@@ -73,5 +73,14 @@
     "react-email": "4.0.14",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "next",
+      "next/core-web-vitals"
+    ],
+    "rules": {
+      "array-callback-return": "error"
+    }
   }
 }

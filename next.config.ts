@@ -12,7 +12,7 @@ const nextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "5mb",
-      suppressHydrationWarning: true,
+      suppressHydrationWarning: false,
     },
   },
 };

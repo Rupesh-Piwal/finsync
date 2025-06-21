@@ -4,11 +4,12 @@ import { useRef, useEffect } from "react";
 import { Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import  useFetch  from "@/hooks/use-fetch";
+import useFetch from "@/hooks/use-fetch";
 import { scanReceipt } from "@/lib/actions/transactions";
+import { ScannedReceipt } from "@/types";
 
 interface ReceiptScannerProps {
-  onScanComplete: (data: unknown) => void; 
+  onScanComplete: (data: ScannedReceipt | null) => void;
 }
 
 export function ReceiptScanner({ onScanComplete }: ReceiptScannerProps) {
@@ -31,8 +32,16 @@ export function ReceiptScanner({ onScanComplete }: ReceiptScannerProps) {
 
   useEffect(() => {
     if (scannedData && !scanReceiptLoading) {
-      onScanComplete(scannedData);
-      toast.success("Receipt scanned successfully");
+      const isValid =
+        typeof scannedData.amount === "number" &&
+        typeof scannedData.date === "string";
+
+      if (isValid) {
+        onScanComplete(scannedData);
+        toast.success("Receipt scanned successfully");
+      } else {
+        toast.error("Scan failed. Invalid receipt data.");
+      }
     }
   }, [scanReceiptLoading, scannedData, onScanComplete]);
 

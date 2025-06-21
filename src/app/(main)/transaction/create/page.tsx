@@ -1,15 +1,17 @@
 import { getUserAccounts } from "@/lib/actions/dashboard";
 import { AddTransactionForm } from "../_components/transaction-form";
 import { getTransaction } from "@/lib/actions/transactions";
-import { AddTransactionPageProps } from "@/types";
 import { defaultCategories } from "../../../../../data/categories";
 import { rehydrateTransaction } from "@/app/lib/rehydrate";
+import { AddTransactionPageProps } from "@/types";
 
 export default async function AddTransactionPage({
   searchParams,
 }: AddTransactionPageProps) {
   const accounts = await getUserAccounts();
-  const editId = searchParams?.edit;
+
+  const params = await searchParams;
+  const editId = params?.edit;
 
   let initialData = null;
   if (editId) {
@@ -40,7 +42,7 @@ export default async function AddTransactionPage({
         <div className="relative">
           <div className="relative bg-[#1b1b1b] backdrop-blur-xl rounded-3xl border border-slate-700/50 shadow-2xl md:py-5 p-1 md:px-0">
             <AddTransactionForm
-              accounts={serializedAccounts} 
+              accounts={serializedAccounts}
               categories={defaultCategories}
               editMode={!!editId}
               initialData={safeInitialData}

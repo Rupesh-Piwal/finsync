@@ -139,9 +139,7 @@ export interface SendEmailProps {
 }
 
 export interface AddTransactionPageProps {
-  searchParams?: {
-    edit?: string;
-  };
+  searchParams: Promise<{ edit?: string }>;
 }
 
 export interface Category {
@@ -152,11 +150,12 @@ export interface Category {
 
 export interface ScannedReceipt {
   amount: number;
-  date: Date;
-  description: string;
-  merchantName: string;
-  category: string;
+  date: Date | string;
+  description?: string;
+  merchantName?: string;
+  category?: string;
 }
+
 export interface ScannedData {
   amount: number;
   date: string;

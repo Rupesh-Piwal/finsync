@@ -3,17 +3,12 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "../prisma";
 import { revalidatePath } from "next/cache";
-import type {
-  Transaction,
-  RecurringInterval,
-} from "@prisma/client";
+import type { Transaction, RecurringInterval } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { request } from "@arcjet/next";
 import aj from "@/app/lib/arcjet";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { CreateTransactionInput, ScannedReceipt } from "@/types";
-
-
 
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {
@@ -286,7 +281,7 @@ export async function scanReceipt(file: File): Promise<ScannedReceipt | null> {
 
       return {
         amount: parseFloat(data.amount),
-        date: new Date(data.date),
+        date: data.date,
         description: data.description,
         category: data.category,
         merchantName: data.merchantName,

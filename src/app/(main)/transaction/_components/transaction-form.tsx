@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, Loader2 } from "lucide-react";
@@ -48,7 +48,7 @@ export function AddTransactionForm({
   editMode = false,
   initialData = null,
 }: {
-  accounts: SerializedAccount[]; // Use SerializedAccount type
+  accounts: SerializedAccount[];
   categories: Category[];
   editMode: boolean;
   initialData?: Transaction | null;
@@ -131,31 +131,35 @@ export function AddTransactionForm({
     }
   };
 
-  const handleScanComplete = (data: unknown) => {
-    if (
-      typeof data === "object" &&
-      data !== null &&
-      "amount" in data &&
-      "date" in data
-    ) {
-      const scannedData = data as ScannedData;
+  const handleScanComplete = useCallback(
+    (data: unknown) => {
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        "amount" in data &&
+        "date" in data
+      ) {
+        const scannedData = data as ScannedData;
+        console.log("Scanned Data:", scannedData);
 
-      setValue("amount", scannedData.amount.toString());
-      setValue("date", new Date(scannedData.date));
+        setValue("amount", scannedData.amount.toString());
+        setValue("date", new Date(scannedData.date));
 
-      if (scannedData.description) {
-        setValue("description", scannedData.description);
+        if (scannedData.description) {
+          setValue("description", scannedData.description);
+        }
+
+        if (scannedData.category) {
+          setValue("category", scannedData.category);
+        }
+
+        toast.success("Receipt scanned successfully");
+      } else {
+        toast.error("Scanned data format is invalid.");
       }
-
-      if (scannedData.category) {
-        setValue("category", scannedData.category);
-      }
-
-      toast.success("Receipt scanned successfully");
-    } else {
-      toast.error("Scanned data format is invalid.");
-    }
-  };
+    },
+    [setValue]
+  );
 
   useEffect(() => {
     if (transactionResult?.success && !transactionLoading) {

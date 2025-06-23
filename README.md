@@ -6,11 +6,13 @@
 
 [![Tech](https://skillicons.dev/icons?i=nextjs,react,typescript,tailwindcss,prisma,vercel,postgresql,nodejs,docker)](https://finsyncai.vercel.app)
 
-## Live Demo
+## Demo
 
-[![Watch the video](https://img.youtube.com/vi/Ab4lrX5xZCg/maxresdefault.jpg)](https://www.youtube.com/watch?v=Ab4lrX5xZCg)
+![Database Schema](./public/FinSync-Demo.png)
 
-#### 🌐 PORTFOLIO 👉🏻 [View My Portfolio](https://rupesh-piwal-portfolio.vercel.app)
+#### LIVE DEMO 👉🏻 [Click to visit FinSync](https://rupesh-piwal-portfolio.vercel.app)
+
+#### PORTFOLIO 👉🏻 [View My Portfolio](https://rupesh-piwal-portfolio.vercel.app)
 
 #### 🤝 Connect With Me
 
@@ -85,7 +87,7 @@ Visual overview of the core tables (Accounts, Transactions, Budgets, Users, etc.
 ```bash
 git clone https://github.com/Rupesh-Piwal/finsync.git
 cd finsync
-pnpm install
+npm install
 ```
 
 ### Setup Environment
@@ -103,7 +105,7 @@ INNGEST_EVENT_KEY=your_inngest_key
 
 ```bash
 npx prisma migrate dev --name init
-pnpm db:seed
+npm db:seed
 ```
 
 ### Run with Docker
@@ -145,7 +147,3 @@ Feel free to reach out to me for guidance or collaboration:
 [<img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" width="38">](mailto:rpiwal02@gmail.com)
 
 ---
-
-## 📜 License
-
-MIT © [Rupesh Piwal](https://github.com/Rupesh-Piwal)

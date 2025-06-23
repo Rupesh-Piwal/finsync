@@ -52,6 +52,14 @@
 
 ---
 
+## 🗂️ Database Schema
+
+Visual overview of the core tables (Accounts, Transactions, Budgets, Users, etc.)
+
+![Database Schema](./public//database-design.png)
+
+---
+
 ## 🛠️ Technologies Used
 
 ### 🧩 Full Stack

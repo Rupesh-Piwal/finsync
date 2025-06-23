@@ -10,7 +10,7 @@
 
 ![Database Schema](./public/FinSync-Demo.png)
 
-#### LIVE DEMO 👉🏻 [Click to visit FinSync](https://rupesh-piwal-portfolio.vercel.app)
+#### LIVE DEMO 👉🏻 [Click to visit FinSync](https://finsyncai.vercel.app/)
 
 #### PORTFOLIO 👉🏻 [View My Portfolio](https://rupesh-piwal-portfolio.vercel.app)
 

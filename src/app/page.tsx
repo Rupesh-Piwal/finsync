@@ -1,7 +1,6 @@
 import { CallToAction } from "@/components/cta/CallToAction";
-import { AITechnology } from "@/components/features/AITechnology";
 import { FeatureCards } from "@/components/features/FeatureCards";
-import { HowItWorks } from "@/components/features/HowItWorks";
+import { Features } from "@/components/features/Features";
 import { Footer } from "@/components/footer/Footer";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { MarketingLayout } from "@/components/layout/MarketingLayout";
@@ -10,9 +9,8 @@ const Page = async () => {
   return (
     <MarketingLayout>
       <HeroSection />
-      <HowItWorks />
+      <Features />
       <FeatureCards />
-      <AITechnology />
       <CallToAction />
       <Footer />
     </MarketingLayout>

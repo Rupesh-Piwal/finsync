@@ -1,6 +1,78 @@
+"use client";
 import React from "react";
+import { motion } from "framer-motion";
 import { SectionHeader } from "../shared/SectionHeader";
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+} as const;
+
+const cardVariants = {
+  hidden: {
+    y: 20,
+    opacity: 0,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+  hover: {
+    y: -5,
+    transition: {
+      duration: 0.3,
+    },
+  },
+} as const;
+
+const gradientLineVariants = {
+  hidden: {
+    scaleX: 0,
+  },
+  visible: {
+    scaleX: 0,
+    transition: {
+      duration: 0,
+    },
+  },
+  hover: {
+    scaleX: 1,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut",
+    },
+  },
+} as const;
+
+const iconVariants = {
+  hidden: {
+    scale: 0.8,
+  },
+  visible: {
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 200,
+      damping: 10,
+    },
+  },
+  hover: {
+    scale: 1.1,
+    transition: {
+      duration: 0.3,
+    },
+  },
+} as const;
 export const FeatureCards = () => {
   const features = [
     {
@@ -74,19 +146,19 @@ export const FeatureCards = () => {
   ];
 
   return (
-    <div className=" w-full py-24 px-4 relative bg-black">
+    <div className="w-full px-4 relative bg-black">
       <div className="absolute top-20 left-40 w-40 h-40 md:w-80 md:h-80 rounded-full bg-[#134E4A]/40 blur-3xl"></div>
-
       <div className="absolute bottom-5 right-10 w-40 h-40 md:w-70 md:h-70 rounded-full bg-[#047857]/40 blur-3xl"></div>
 
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full  blur-3xl animate-pulse"
+          className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-grid-pattern opacity-5"></div>
       </div>
+
       <div className="max-w-7xl mx-auto relative z-10">
         <SectionHeader
           subtitle="Powerful Features"
@@ -94,11 +166,17 @@ export const FeatureCards = () => {
           description="Our AI-powered platform handles the tedious work so you can focus on financial insights and growth."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {features.map((feature, index) => (
             <FeatureCard key={index} index={index} feature={feature} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -117,38 +195,62 @@ const FeatureCard = ({
   };
 }) => {
   return (
-    <div className="relative backdrop-blur-md bg-white/5 p-8 rounded-2xl border border-white/10 transition-all duration-300 group hover:transform hover:translate-y-1 hover:shadow-lg shadow-xl overflow-hidden">
+    <motion.div
+      className="relative backdrop-blur-md bg-white/5 p-8 rounded-2xl border border-white/10 shadow-xl overflow-hidden"
+      variants={cardVariants}
+      whileHover="hover"
+    >
       {/* Gradient background that reveals on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/0 to-teal-900/0 group-hover:from-emerald-900/20 group-hover:to-teal-900/20 transition-all duration-500"></div>
 
       {/* Top accent line */}
-      <div
-        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}
-      ></div>
+      <motion.div
+        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient}`}
+        variants={gradientLineVariants}
+      />
 
       {/* Feature number badge */}
-      <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-medium text-emerald-300">
+      <motion.div
+        className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-medium text-emerald-300"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 0.5, type: "spring" }}
+      >
         {index + 1}
-      </div>
+      </motion.div>
 
       {/* Icon with gradient background */}
-      <div
-        className={`mb-6 w-14 h-14 rounded-full bg-gradient-to-br ${feature.gradient} text-white flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300`}
+      <motion.div
+        className={`mb-6 w-14 h-14 rounded-full bg-gradient-to-br ${feature.gradient} text-white flex items-center justify-center shadow-lg`}
+        variants={iconVariants}
       >
         {feature.icon}
-      </div>
+      </motion.div>
 
-      <h3 className="text-xl font-semibold mb-4 text-white group-hover:text-emerald-300 transition-colors duration-300">
+      <motion.h3
+        className="text-xl font-semibold mb-4 text-white"
+        whileHover={{ color: "#6EE7B7" }}
+        transition={{ duration: 0.3 }}
+      >
         {feature.title}
-      </h3>
+      </motion.h3>
 
-      <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300 relative z-10">
+      <motion.p
+        className="text-gray-400 relative z-10"
+        whileHover={{ color: "#D1D5DB" }}
+        transition={{ duration: 0.3 }}
+      >
         {feature.description}
-      </p>
+      </motion.p>
 
       {/* Bottom decoration */}
-      <div className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-full bg-gradient-to-tl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-    </div>
+      <motion.div
+        className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-full bg-gradient-to-tl from-emerald-500/10 to-transparent"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      />
+    </motion.div>
   );
 };
 

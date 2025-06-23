@@ -16,23 +16,10 @@ const Header = async () => {
         </Link>
 
         <div className="hidden md:flex items-center space-x-8">
-          <SignedOut>
-            <a
-              href="#features"
-              className="text-emerald-100 hover:text-emerald-300 font-medium transition-colors duration-200"
-            >
-              Features
-            </a>
-            <a
-              href="#testimonials"
-              className="text-emerald-100 hover:text-emerald-300 font-medium transition-colors duration-200"
-            >
-              Testimonials
-            </a>
-          </SignedOut>
+          <SignedOut></SignedOut>
         </div>
 
-        {/* Action Buttons */}
+        
         <div className="flex items-center space-x-4">
           <SignedIn>
             <Link

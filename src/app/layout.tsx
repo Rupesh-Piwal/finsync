@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
+
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
+import { Bricolage_Grotesque } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const bricolage_grotesque = Bricolage_Grotesque({
+  subsets: ["latin"],
+});
+
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "FinSync",
@@ -21,7 +27,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${inter.className} antialiased bg-[#000000] text-[#ffffff]`}
+          className={`${bricolage_grotesque.className} antialiased bg-[#000000] text-[#ffffff]`}
         >
           <Analytics />
           {children}

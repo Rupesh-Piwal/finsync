@@ -27,8 +27,7 @@ export const Features = () => {
   ];
 
   return (
-    <div className="w-full py-24 px-4 relative overflow-hidden bg-black">
-      {/* Decorative backgrounds */}
+    <div className="w-full md:py-14 py-8 px-4 relative overflow-hidden bg-black">
       <div
         className="absolute inset-0 opacity-30"
         style={{
@@ -36,8 +35,8 @@ export const Features = () => {
           backgroundSize: "32px 32px",
         }}
       />
-      <div className="absolute top-1/6 left-1/6 w-96 h-96 bg-gradient-to-r from-emerald-200/20 to-teal-200/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/6 w-96 h-96 bg-gradient-to-r from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 left-1/12 w-62 h-62 md:w-96 md:h-96 bg-gradient-to-r from-emerald-200/20 to-teal-200/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/14 w-62 h-62 right-1/8 md:w-96 md:h-96 bg-gradient-to-r from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header Section */}

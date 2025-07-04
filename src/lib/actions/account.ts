@@ -11,29 +11,6 @@ import {
 } from "@/types";
 import { Account } from "@prisma/client";
 
-// const serializeTransaction = (obj: TransactionLike): SerializedTransaction => {
-//   if (!obj.accountId) {
-//     throw new Error("Missing accountId in transaction");
-//   }
-
-//   return {
-//     id: obj.id,
-//     type: obj.type,
-//     amount: obj.amount?.toNumber() ?? 0,
-//     date: obj.date,
-//     category: obj.category,
-//     description: obj.description,
-//     status: obj.status,
-//     accountId: obj.accountId,
-//     tags: obj.tags ?? [],
-//     balance: obj.balance?.toNumber() ?? 0,
-//     isRecurring: obj.isRecurring ?? false,
-//     userId: obj.userId,
-//     currency: obj.currency ?? "USD",
-//     createdAt: obj.createdAt?.toISOString(),
-//     updatedAt: obj.updatedAt?.toISOString(),
-//   };
-// };
 
 const serializeDecimal = (obj: TransactionLike): SerializedTransaction => {
   const serialized = obj as unknown as SerializedTransaction;
@@ -113,7 +90,6 @@ export async function updateDefaultAccount(accountId: string) {
       throw new Error("User not found");
     }
 
-    // First, unset any existing default account
     await db.account.updateMany({
       where: {
         userId: user.id,
@@ -122,7 +98,6 @@ export async function updateDefaultAccount(accountId: string) {
       data: { isDefault: false },
     });
 
-    // Then set the new default account
     const account = await db.account.update({
       where: {
         id: accountId,

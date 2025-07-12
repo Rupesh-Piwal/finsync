@@ -22,35 +22,36 @@
 
 ## 🎯 Key Features
 
-### 🧠 AI-Powered Tools
+### 🧾 AI Receipt Scanner
+![AI Receipt Scanner](./public//AI-Reciept-Scanner1.png)  
+Upload a receipt and let Gemini 1.5 Flash extract:
+- Amount, date, merchant, description, and category  
+- Auto-fills the form for quick entry
 
-- AI Receipt Scanner – Upload and auto-fill transaction data.
-- Monthly Spending Summaries – Intelligent analysis and suggestions.
-- Auto-categorization of transactions using LLM.
+---
+### 🔁 Recurring Transaction Automation  
 
-### 📊 Financial Dashboard
+![Recurring Transactions](./public/recurring-transaction-automation.png)
+- Users mark transactions as recurring (daily/weekly/monthly)  
+- Scheduled job checks and auto-adds them on due dates  
+- Updates account balance and next due date
 
-- Bar charts, pie charts, and filters.
-- Transaction history, sorting, and search.
-- Budget progress indicators.
+---
 
-### 🔄 Automation with Inngest
+### 🚨 Budget Threshold Alerts  
+![Budget Alerts](./public/budget-threshold-alerts.png)
+- Users define budgets by category  
+- Every 6 hours, the system checks spending  
+- If >60% used, sends email alerts  
+- Prevents repeated alerts within the same month
 
-- Monthly report email jobs.
-- Recurring transaction automation.
-- Budget threshold alerts with email notifications.
+---
 
-### 💾 Account & Transaction Management
-
-- Create/Edit/Delete accounts and transactions.
-- Bulk delete operations.
-- Switch between multiple accounts.
-
-### 🔒 Security & Performance
-
-- Auth powered by **Clerk**.
-- Rate limiting and bot protection via **Arcjet**.
-- Protected API routes and secure session management.
+## 🔒 Security Layer: Clerk+Acjet Protection
+![Security Flow](./public//Arcjet%20protection.png)
+- Secure authentication via **Clerk**  
+- Rate limiting and bot protection with **Arcjet**  
+- All sensitive routes are protected and session-aware
 
 ---
 

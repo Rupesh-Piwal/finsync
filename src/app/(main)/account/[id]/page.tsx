@@ -6,6 +6,12 @@ import { BarLoader } from "react-spinners";
 import TransactionTable from "../_components/transaction-table";
 import { CreditCard, ArrowUpDown } from "lucide-react";
 import { AccountChart } from "../_components/account-chart";
+import { AccountChartSkeleton } from "../skeletons/AccountChartSkeleton";
+import { TransactionTableSkeleton } from "../skeletons/TransactionTableSkeleton";
+
+
+
+
 
 const Account = async ({ params }: AccountPageProps) => {
   const resolvedParams = await params;
@@ -59,10 +65,20 @@ const Account = async ({ params }: AccountPageProps) => {
           </div>
         </div>
 
-        {/* Chart Section */}
+      
         <Suspense
           fallback={
-            <BarLoader className="mt-4" width={"100%"} color="#9333ea" />
+            <div className="w-full">
+              <div className="w-full flex justify-center mb-4">
+                <BarLoader width={"100%"} color="#0D9488" />
+              </div>
+              <div className="text-center mb-4">
+                <p className="text-gray-400 text-sm">
+                  Loading transaction overview...
+                </p>
+              </div>
+              <AccountChartSkeleton />
+            </div>
           }
         >
           <AccountChart transactions={transactions} />
@@ -76,8 +92,16 @@ const Account = async ({ params }: AccountPageProps) => {
 
           <Suspense
             fallback={
-              <div className="flex justify-center py-10">
-                <BarLoader color="#5eead4" width={200} />
+              <div className="w-full">
+                <div className="w-full flex justify-center mb-4">
+                  <BarLoader width={"100%"} color="#5eead4" />
+                </div>
+                <div className="text-center mb-4">
+                  <p className="text-gray-400 text-sm">
+                    Loading transaction history...
+                  </p>
+                </div>
+                <TransactionTableSkeleton />
               </div>
             }
           >

@@ -23,18 +23,15 @@ const page = async () => {
 
   return (
     <div className="sapce-y-8">
-      
       <BudgetProgress
         initialBudget={budgetData?.budget ?? null}
         currentExpenses={budgetData?.currentExpenses || 0}
       />
 
-     
       <DashboardOverview
         accounts={accounts}
         transactions={transactions || []}
       />
-
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <CreateAccountDrawer>

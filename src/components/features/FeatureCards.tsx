@@ -1,257 +1,330 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { SectionHeader } from "../shared/SectionHeader";
+import { BarChart3, Receipt, Table, ScanLine } from "lucide-react";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence, MotionStyle, Transition } from "motion/react";
+import { cn } from "@/lib/utils";
+import create from "../../../public/create-transaction.png";
+import dashboard from "../../../public/Dashboard-chart.png";
+import table from "../../../public/transaction.png";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
-  },
-} as const;
+// BorderBeam Component
+interface BorderBeamProps {
+  size?: number;
+  duration?: number;
+  delay?: number;
+  colorFrom?: string;
+  colorTo?: string;
+  transition?: Transition;
+  className?: string;
+  style?: React.CSSProperties;
+  reverse?: boolean;
+  initialOffset?: number;
+  borderWidth?: number;
+}
 
-const cardVariants = {
-  hidden: {
-    y: 20,
-    opacity: 0,
-  },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-  hover: {
-    y: -5,
-    transition: {
-      duration: 0.3,
-    },
-  },
-} as const;
-
-const gradientLineVariants = {
-  hidden: {
-    scaleX: 0,
-  },
-  visible: {
-    scaleX: 0,
-    transition: {
-      duration: 0,
-    },
-  },
-  hover: {
-    scaleX: 1,
-    transition: {
-      duration: 0.4,
-      ease: "easeOut",
-    },
-  },
-} as const;
-
-const iconVariants = {
-  hidden: {
-    scale: 0.8,
-  },
-  visible: {
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 200,
-      damping: 10,
-    },
-  },
-  hover: {
-    scale: 1.1,
-    transition: {
-      duration: 0.3,
-    },
-  },
-} as const;
-export const FeatureCards = () => {
-  const features = [
-    {
-      title: "Receipt Recognition",
-      description:
-        "Our AI recognizes and extracts data from any receipt format, including handwritten ones.",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M7.5 3.75H6A2.25 2.25 0 003.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0120.25 6v1.5m0 9V18A2.25 2.25 0 0118 20.25h-1.5m-9 0H6A2.25 2.25 0 013.75 18v-1.5M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
-      ),
-      gradient: "from-emerald-400 to-teal-500",
-    },
-    {
-      title: "Auto-Categorization",
-      description:
-        "Expenses are intelligently sorted into categories based on vendor and purchase patterns.",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 6h.008v.008H6V6z"
-          />
-        </svg>
-      ),
-      gradient: "from-teal-400 to-emerald-500",
-    },
-    {
-      title: "Real-time Sync",
-      description:
-        "All scanned receipts immediately sync across all your devices and team members.",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
-          />
-        </svg>
-      ),
-      gradient: "from-emerald-400 to-teal-500",
-    },
-  ];
-
+const BorderBeam = ({
+  className,
+  size = 50,
+  delay = 0,
+  duration = 6,
+  colorFrom = "#10b981",
+  colorTo = "#14b8a6",
+  transition,
+  style,
+  reverse = false,
+  initialOffset = 0,
+  borderWidth = 1,
+}: BorderBeamProps) => {
   return (
-    <div className="w-full px-4 relative bg-black">
-      <div className="absolute top-20 left-40 w-40 h-40 md:w-80 md:h-80 rounded-full bg-[#134E4A]/40 blur-3xl"></div>
-      <div className="absolute bottom-5 right-10 w-40 h-40 md:w-70 md:h-70 rounded-full bg-[#047857]/40 blur-3xl"></div>
-
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl animate-pulse"></div>
-        <div
-          className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full blur-3xl animate-pulse"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-grid-pattern opacity-5"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        <SectionHeader
-          subtitle="Powerful Features"
-          title="Everything You Need"
-          description="Our AI-powered platform handles the tedious work so you can focus on financial insights and growth."
-        />
-
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          {features.map((feature, index) => (
-            <FeatureCard key={index} index={index} feature={feature} />
-          ))}
-        </motion.div>
-      </div>
+    <div
+      className="pointer-events-none absolute inset-0 rounded-[inherit] border-transparent [mask-clip:padding-box,border-box] [mask-composite:intersect] [mask-image:linear-gradient(transparent,transparent),linear-gradient(#000,#000)]"
+      style={
+        {
+          "--border-beam-width": `${borderWidth}px`,
+        } as React.CSSProperties
+      }
+    >
+      <motion.div
+        className={cn(
+          "absolute aspect-square rounded-full blur-sm",
+          "bg-gradient-to-r from-[var(--color-from)] via-[var(--color-to)] to-transparent",
+          className
+        )}
+        style={
+          {
+            width: size,
+            height: size,
+            offsetPath: `rect(0 auto auto 0 round 24px)`,
+            "--color-from": colorFrom,
+            "--color-to": colorTo,
+            ...style,
+          } as MotionStyle
+        }
+        initial={{ offsetDistance: `${initialOffset}%` }}
+        animate={{
+          offsetDistance: reverse
+            ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
+            : [`${initialOffset}%`, `${100 + initialOffset}%`],
+        }}
+        transition={{
+          repeat: Infinity,
+          ease: "linear",
+          duration,
+          delay: -delay,
+          ...transition,
+        }}
+      />
     </div>
   );
 };
 
-const FeatureCard = ({
-  index,
-  feature,
-}: {
-  index: number;
-  feature: {
-    title: string;
-    description: string;
-    icon: React.ReactNode;
-    gradient: string;
+export default function FeatAcc() {
+  type ImageKey = "item-1" | "item-2" | "item-3";
+  const [activeItem, setActiveItem] = useState<ImageKey>("item-1");
+
+  // Auto-advance slides every 3 seconds
+  useEffect(() => {
+    const features: ImageKey[] = ["item-1", "item-2", "item-3"];
+    const interval = setInterval(() => {
+      setActiveItem((current) => {
+        const currentIndex = features.indexOf(current);
+        const nextIndex = (currentIndex + 1) % features.length;
+        return features[nextIndex];
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const images = {
+    "item-1": {
+      image: create,
+      alt: "AI receipt scanning interface",
+    },
+    "item-2": {
+      image: dashboard,
+      alt: "Analytics dashboard with charts and budget tracking",
+    },
+    "item-3": {
+      image: table,
+      alt: "Transaction history table with filters and sorting",
+    },
   };
-}) => {
+
+  const features = [
+    {
+      key: "item-1" as ImageKey,
+      icon: ScanLine,
+      title: "AI Receipt Scanning",
+      description:
+        "Simply snap a photo of any receipt and let our advanced AI extract all transaction details automatically. No more manual data entry - from merchant names to amounts and categories, everything is captured instantly with industry-leading accuracy.",
+    },
+    {
+      key: "item-2" as ImageKey,
+      icon: BarChart3,
+      title: "Visual Analytics Dashboard",
+      description:
+        "Get comprehensive insights with interactive charts showing your spending patterns, weekly transaction summaries, and monthly budget tracking. Monitor your financial health with beautiful visualizations that make complex data easy to understand.",
+    },
+    {
+      key: "item-3" as ImageKey,
+      icon: Table,
+      title: "Smart Transaction Management",
+      description:
+        "Access your complete transaction history through an advanced table interface with powerful filtering and sorting capabilities. Search by date, amount, category, or merchant to find exactly what you need in seconds.",
+    },
+  ];
+
   return (
-    <motion.div
-      className="relative backdrop-blur-md bg-white/5 p-8 rounded-2xl border border-white/10 shadow-xl overflow-hidden"
-      variants={cardVariants}
-      whileHover="hover"
-    >
-      {/* Gradient background that reveals on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/0 to-teal-900/0 group-hover:from-emerald-900/20 group-hover:to-teal-900/20 transition-all duration-500"></div>
+    <section className="py-20 lg:py-32 bg-zinc-950 relative overflow-hidden">
+      {/* Subtle background elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.03),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(20,184,166,0.02),transparent_50%)]" />
 
-      {/* Top accent line */}
-      <motion.div
-        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.gradient}`}
-        variants={gradientLineVariants}
-      />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Header */}
+        <div className="mx-auto max-w-3xl text-center mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl lg:text-6xl font-bold tracking-tight text-white mb-6"
+          >
+            Smart Expense Tracking
+            <span className="text-emerald-400 block lg:inline">
+              {" "}
+              Made Simple
+            </span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-lg text-zinc-400 leading-relaxed"
+          >
+            Transform how you manage expenses with AI-powered receipt scanning,
+            intelligent analytics, and comprehensive transaction management.
+          </motion.p>
+        </div>
 
-      {/* Feature number badge */}
-      <motion.div
-        className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-medium text-emerald-300"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.5, type: "spring" }}
-      >
-        {index + 1}
-      </motion.div>
+        {/* Main content */}
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left side - Accordion */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-3"
+          >
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.key}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className={`group rounded-2xl border transition-all duration-300 overflow-hidden ${
+                  activeItem === feature.key
+                    ? "bg-emerald-950/20 border-emerald-500/30 shadow-[inset_0_1px_0_rgba(16,185,129,0.1)]  shadow-emerald-500/5"
+                    : "bg-zinc-900/50 border-zinc-800/50 hover:border-zinc-700/60 hover:bg-zinc-900/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]"
+                }`}
+              >
+                <button
+                  onClick={() => setActiveItem(feature.key)}
+                  className="w-full text-left p-6 focus:outline-none"
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`p-2 rounded-xl transition-colors shadow-[inset_0_-1px_0_rgba(0,0,0,0.2)] ${
+                        activeItem === feature.key
+                          ? "bg-emerald-500/20 text-emerald-400 shadow-[inset_0_1px_0_rgba(16,185,129,0.1)]"
+                          : "bg-zinc-800/50 text-zinc-500 group-hover:text-zinc-400 shadow-[inset_0_-1px_0_rgba(0,0,0,0.3)]"
+                      }`}
+                    >
+                      <feature.icon size={20} />
+                    </div>
+                    <div className="flex-1">
+                      <h3
+                        className={`text-lg font-semibold transition-colors ${
+                          activeItem === feature.key
+                            ? "text-white"
+                            : "text-zinc-300 group-hover:text-white"
+                        }`}
+                      >
+                        {feature.title}
+                      </h3>
+                    </div>
+                    <div
+                      className={`transition-transform duration-300 ${
+                        activeItem === feature.key ? "rotate-180" : ""
+                      }`}
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        className={`transition-colors ${
+                          activeItem === feature.key
+                            ? "text-emerald-400"
+                            : "text-zinc-500"
+                        }`}
+                      >
+                        <path fill="currentColor" d="M4 6l4 4 4-4H4z" />
+                      </svg>
+                    </div>
+                  </div>
 
-      {/* Icon with gradient background */}
-      <motion.div
-        className={`mb-6 w-14 h-14 rounded-full bg-gradient-to-br ${feature.gradient} text-white flex items-center justify-center shadow-lg`}
-        variants={iconVariants}
-      >
-        {feature.icon}
-      </motion.div>
+                  <AnimatePresence>
+                    {activeItem === feature.key && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-4 pl-14 pr-8">
+                          <p className="text-zinc-400 leading-relaxed">
+                            {feature.description}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </button>
+              </motion.div>
+            ))}
+          </motion.div>
 
-      <motion.h3
-        className="text-xl font-semibold mb-4 text-white"
-        whileHover={{ color: "#6EE7B7" }}
-        transition={{ duration: 0.3 }}
-      >
-        {feature.title}
-      </motion.h3>
+          {/* Right side - Image showcase */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative"
+          >
+            {/* Outer container with modern shadows */}
+            <div className="relative bg-black/20 backdrop-blur-sm rounded-3xl p-4 border border-zinc-800/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.03),inset_0_-1px_0_rgba(0,0,0,0.5)] ">
+              {/* Inner image container with deep inset shadows */}
+              <div className="relative bg-zinc-950 rounded-2xl overflow-hidden shadow-[inset_0_2px_8px_rgba(0,0,0,0.6),inset_0_-1px_2px_rgba(255,255,255,0.02)]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeItem}
+                    initial={{ opacity: 0, scale: 0.96, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, y: -10 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="aspect-[4/3] relative"
+                  >
+                    {/* Dark inner border for depth */}
+                    <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_0_1px_rgba(0,0,0,0.8)] z-10 pointer-events-none" />
 
-      <motion.p
-        className="text-gray-400 relative z-10"
-        whileHover={{ color: "#D1D5DB" }}
-        transition={{ duration: 0.3 }}
-      >
-        {feature.description}
-      </motion.p>
+                    <Image
+                      src={images[activeItem].image}
+                      alt={images[activeItem].alt}
+                      fill
+                      className="object-cover object-center rounded-2xl"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
 
-      {/* Bottom decoration */}
-      <motion.div
-        className="absolute bottom-0 right-0 w-24 h-24 rounded-tl-full bg-gradient-to-tl from-emerald-500/10 to-transparent"
-        initial={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      />
-    </motion.div>
+                    {/* Deep inner shadows over image */}
+                    <div className="absolute inset-0 shadow-[inset_0_4px_12px_rgba(0,0,0,0.4),inset_0_-2px_6px_rgba(0,0,0,0.3)] rounded-2xl pointer-events-none" />
+
+                    {/* Subtle vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20 rounded-2xl pointer-events-none" />
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Feature indicator dots with inner shadows */}
+                <div className="absolute bottom-6 right-6 flex gap-3 z-20">
+                  {features.map((feature) => (
+                    <div
+                      key={feature.key}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        activeItem === feature.key
+                          ? "bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                          : "bg-zinc-700 shadow-[inset_0_1px_2px_rgba(0,0,0,0.8)]"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Emerald/Teal BorderBeam */}
+              <BorderBeam
+                size={80}
+                duration={8}
+                colorFrom="#10b981"
+                colorTo="#14b8a6"
+                className="opacity-60"
+              />
+
+              {/* Outer glow for premium feel */}
+              <div className="absolute -inset-1 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 rounded-3xl blur-xl -z-10" />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
   );
-};
-
-export default FeatureCards;
+}

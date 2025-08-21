@@ -10,7 +10,7 @@ import Hero from "../../../public/hero.png";
 
 export const HeroSection = () => {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8 max-w-7xl mx-auto relative overflow-hidden mt-[30px] md:mt-[65px]">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8 max-w-7xl mx-auto relative mt-[30px] md:mt-[65px]">
       <HeroContent />
       <ProductShowcase />
     </div>
@@ -20,7 +20,7 @@ export const HeroSection = () => {
 const HeroContent = () => {
   return (
     <motion.div
-      className="w-full max-w-5xl space-y-8 text-center z-10 mb-16"
+      className="w-full max-w-5xl space-y-8 text-center z-10 mb-20"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -53,7 +53,7 @@ const HeroContent = () => {
         </motion.div>
 
         <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-5xl font-bold tracking-tight leading-[1.1]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -68,7 +68,7 @@ const HeroContent = () => {
         </motion.h1>
 
         <motion.p
-          className="text-[16px] sm:text-xl bg-gradient-to-r from-[#FDFDFD] to-[#B7B9BE]/80 bg-clip-text text-transparent leading-relaxed max-w-3xl mx-auto px-4"
+          className="text-[16px] md:text-[17px] sm:text-xl bg-gradient-to-r from-[#FDFDFD] to-[#B7B9BE]/80 bg-clip-text text-transparent leading-relaxed max-w-3xl mx-auto px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
@@ -107,61 +107,108 @@ const ProductShowcase = () => {
   const imageWrapperRef = useRef(null);
 
   const { scrollY } = useScroll();
-  const scale = useTransform(scrollY, [0, 300], [1, 1.05]);
-  const shadow = useTransform(
-    scrollY,
-    [0, 300],
-    ["0px 0px 0px rgba(0,0,0,0)", "0px 20px 40px rgba(0,0,0,0.2)"]
-  );
+  const y = useTransform(scrollY, [0, 500], [0, -50]);
 
   return (
     <motion.div
-      className="relative w-full max-w-4xl mx-auto"
+      className="relative w-full max-w-6xl mx-auto"
       initial={{ opacity: 0, y: 60 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.3 }}
+      transition={{ duration: 0.8, delay: 0.4 }}
+      style={{ y }}
     >
-      <div className="relative">
-        {/* Floating blurred background circles */}
-        <motion.div
-          className="absolute -top-20 -left-20 w-40 h-40 bg-black rounded-full blur-3xl"
-          animate={{ x: [0, 20, 0], y: [0, -20, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute -bottom-20 -right-20 w-60 h-60 rounded-full blur-3xl"
-          animate={{ x: [0, -30, 0], y: [0, 20, 0] }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
+      <motion.div
+        ref={imageWrapperRef}
+        className="relative group cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        whileHover={{ y: -8 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        {/* Main image container with premium shadow */}
+        <div className="relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
+          {/* Premium shadow layers */}
+          <div className="absolute inset-0 rounded-2xl shadow-[0_0_0_1px_rgba(255,255,255,0.05)] pointer-events-none" />
+          <div className="absolute -inset-4 rounded-3xl bg-gradient-to-b from-white/[0.02] to-transparent blur-2xl opacity-60 pointer-events-none" />
 
-        {/* Gradient glowing border wrapper */}
-        <div className="p-[2px] rounded-xl bg-gradient-to-r from-teal-800 to-cyan-700 hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 transform hover:scale-[1.02] shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40">
+          {/* Subtle glow effect */}
           <motion.div
-            ref={imageWrapperRef}
-            className="relative bg-gray-900/50 backdrop-blur-xl rounded-xl border border-transparent overflow-hidden"
-            style={{ scale, boxShadow: shadow }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            animate={{
-              scale: isHovered ? 1.05 : 1,
-              y: isHovered ? -5 : 0,
+            className="absolute -inset-8 rounded-3xl opacity-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(16, 185, 129, 0.06), transparent 40%)",
             }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
             transition={{ duration: 0.3 }}
+          />
+
+          {/* Image */}
+          <motion.div
+            className="relative z-10 overflow-hidden rounded-2xl"
+            animate={{
+              scale: isHovered ? 1.02 : 1,
+            }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
             <Image
               src={Hero}
               alt="finsync banner"
-              className="object-contain w-full h-auto"
+              className="object-contain w-full h-auto select-none"
               priority
+              draggable={false}
             />
+
+            {/* Subtle overlay for premium feel */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5 pointer-events-none" />
           </motion.div>
         </div>
-      </div>
+
+        {/* Ultra-subtle ambient glow */}
+        <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-b from-emerald-500/5 to-transparent blur-3xl scale-110 opacity-40" />
+
+        {/* Premium drop shadow */}
+        <motion.div
+          className="absolute inset-0 -z-20 rounded-2xl"
+          style={{
+            boxShadow:
+              "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+          }}
+          animate={{
+            boxShadow: isHovered
+              ? "0 35px 80px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1)"
+              : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+          }}
+          transition={{ duration: 0.4 }}
+        />
+      </motion.div>
+
+      {/* Floating elements for depth */}
+      <motion.div
+        className="absolute top-1/4 -left-20 w-2 h-2 bg-emerald-400/30 rounded-full blur-sm"
+        animate={{
+          y: [0, -20, 0],
+          opacity: [0.3, 0.7, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 1,
+        }}
+      />
+      <motion.div
+        className="absolute top-3/4 -right-16 w-1 h-1 bg-teal-400/40 rounded-full blur-sm"
+        animate={{
+          y: [0, 15, 0],
+          opacity: [0.4, 0.8, 0.4],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      />
     </motion.div>
   );
 };

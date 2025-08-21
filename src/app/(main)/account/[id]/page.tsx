@@ -10,9 +10,6 @@ import { AccountChartSkeleton } from "../skeletons/AccountChartSkeleton";
 import { TransactionTableSkeleton } from "../skeletons/TransactionTableSkeleton";
 
 
-
-
-
 const Account = async ({ params }: AccountPageProps) => {
   const resolvedParams = await params;
   const accountData = await getAccountWithTransactions(resolvedParams.id);
@@ -26,7 +23,6 @@ const Account = async ({ params }: AccountPageProps) => {
   return (
     <div className="min-h-screen bg-black text-gray-100">
       <div className="max-w-7xl mx-auto px-1.5 sm:px-6 lg:px-8 py-6 space-y-8">
-        {/* Header Section with Account Details */}
         <div className="bg-gradient-to-br from-[#1b1b1b] to-gray-[#1c1c1c] rounded-2xl p-6 shadow-lg border border-gray-800">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div className="flex items-center space-x-4">

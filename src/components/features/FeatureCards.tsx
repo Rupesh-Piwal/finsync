@@ -1,5 +1,5 @@
 "use client";
-import { BarChart3, Receipt, Table, ScanLine } from "lucide-react";
+import { BarChart3, Table, ScanLine } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, MotionStyle, Transition } from "motion/react";

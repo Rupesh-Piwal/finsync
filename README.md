@@ -12,7 +12,7 @@
 
 #### LIVE DEMO 👉🏻 [Click to visit FinSync](https://finsyncai.vercel.app/)
 
-#### PORTFOLIO 👉🏻 [View My Portfolio](https://rupesh-piwal-portfolio.vercel.app)
+#### PORTFOLIO 👉🏻 [View My Portfolio](https://rpdev21.vercel.app/)
 
 #### 🤝 Connect With Me
 
@@ -23,34 +23,42 @@
 ## 🎯 Key Features
 
 ### 🧾 AI Receipt Scanner
+
 ![AI Receipt Scanner](./public//AI-Reciept-Scanner1.png)  
 Upload a receipt and let Gemini 1.5 Flash extract:
-- Amount, date, merchant, description, and category  
+
+- Amount, date, merchant, description, and category
 - Auto-fills the form for quick entry
 
 ---
-### 🔁 Recurring Transaction Automation  
+
+### 🔁 Recurring Transaction Automation
 
 ![Recurring Transactions](./public/recurring-transaction-automation.png)
-- Users mark transactions as recurring (daily/weekly/monthly)  
-- Scheduled job checks and auto-adds them on due dates  
+
+- Users mark transactions as recurring (daily/weekly/monthly)
+- Scheduled job checks and auto-adds them on due dates
 - Updates account balance and next due date
 
 ---
 
-### 🚨 Budget Threshold Alerts  
+### 🚨 Budget Threshold Alerts
+
 ![Budget Alerts](./public/budget-threshold-alerts.png)
-- Users define budgets by category  
-- Every 6 hours, the system checks spending  
-- If >60% used, sends email alerts  
+
+- Users define budgets by category
+- Every 6 hours, the system checks spending
+- If >60% used, sends email alerts
 - Prevents repeated alerts within the same month
 
 ---
 
 ## 🔒 Security Layer: Clerk+Acjet Protection
+
 ![Security Flow](./public//Arcjet%20protection.png)
-- Secure authentication via **Clerk**  
-- Rate limiting and bot protection with **Arcjet**  
+
+- Secure authentication via **Clerk**
+- Rate limiting and bot protection with **Arcjet**
 - All sensitive routes are protected and session-aware
 
 ---
